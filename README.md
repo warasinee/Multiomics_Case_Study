@@ -1,4 +1,4 @@
-# Multi-omics: Case Study ()
+# Multi-omics: Case Study (*Klebsiella variicola*)
 
 This is the case study using the multi-omics analysis pipeline (XXX). 
 
