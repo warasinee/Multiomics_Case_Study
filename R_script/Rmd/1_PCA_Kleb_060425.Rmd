@@ -25,7 +25,7 @@ Kleb_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Kleb_metabolome_GC_dat
 
 ## Data for MixOmics 
 ```{r}
-data <- list(Transcript = Kleb_prot_data, 
+data <- list(Transcript = Kleb_trans_data, 
              Protein = Kleb_prot_data, 
              Metabolite_GC = Kleb_met_GC_data)
 lapply(data, dim) # check their dimensions (24 rows)
@@ -43,6 +43,7 @@ plot.tune.pca <- list()
 pca.cum.var <- list()
 
 for (i in seq_along(data_name)){
+  set.seed(123) # for reproducibility
   data_pca <- data[[i]]
   # Choosing number of components
   tune.pca <- tune.pca(data_pca, ncomp = 10, scale = TRUE)
