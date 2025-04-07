@@ -288,5 +288,6 @@ you can look at the perf plot and decide on the number of components
 
     myNetwork2 <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.96) 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_13.png)
+
     #write_graph(myNetwork2$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Kleb_cor095.gml", format = "gml")
 
