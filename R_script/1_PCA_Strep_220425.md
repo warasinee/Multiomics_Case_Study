@@ -1,5 +1,13 @@
 ## Load R packages
 
+- [Load R packages](#load-r-packages)
+- [Import all omics](#import-all-omics)
+- [Data for MixOmics](#data-for-mixomics)
+- [PCA](#pca)
+- [Data visualization - Preliminary](#data-visualization---preliminary)
+- [Data visualization - Final](#data-visualization---final)
+- [Save](#save)
+  
     library(mixOmics)
 
     ## Loading required package: MASS
