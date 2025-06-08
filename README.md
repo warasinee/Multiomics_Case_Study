@@ -2,14 +2,13 @@
 
 This is a case study using the multi-omics analysis pipeline (XXX). 
 
-In this study, we applied multivariate data integration methods and network analysis to previously published multi-omics datasets [(Mu et al., 2023)](https://www.nature.com/articles/s41467-023-37200-w) generated from five *Streptococcus pyogenes* and two *Klebsiella pneumoniae* genotypes exposed to human serum. 
+In this study, we applied multivariate data integration methods and network analysis to previously published multi-omics datasets [(Mu et al., 2023)](https://www.nature.com/articles/s41467-023-37200-w) generated from five *Streptococcus pyogenes* genotypes exposed to human serum. 
 
-## Case study 1 - *Streptococcus pyogenes*
-## 2. Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
+## 1. Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
 We implemented the MixOmics data analytic pipelines including PCA and Multiblock (s)PLS-DA or DIABLO. 
 
-### **[2.1. PCA](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/1_PCA_130125.md)** 
+### **[1.1. PCA](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/1_PCA_130125.md)** 
 Initially, Principal Component Analysis (PCA), a dimensionality reduction and unsupervised machine learning method, was performed to assess the similarities of bacterial responses to distinct media conditions (Serum and RPMI).  
 
 **Key steps:** 
@@ -52,7 +51,7 @@ plotIndiv_pca_trans <- plotIndiv(list.final.pca[[1]], group = Y, ind.names = FAL
                                   title = 'Transcriptome') 
 ```
 
-### **[2.2. DIABLO](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/2_DIABLO_130125.md)** 
+### **[1.2. DIABLO](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/2_DIABLO_130125.md)** 
 Here, we performed integrative supervised analysis using Data Integration Analysis for Biomarker discovery using Latent cOmponents (DIABLO), providing highly correlated variables from omics datasets discriminating *S. aureus* responses under two different conditions (Serum and RPMI).
 This script contains all steps to identify signature molecules of *S. aureus* serum responses, including generating basic DIABLO model, tuning the number of components, and creating final DIABLO model.
 
@@ -145,7 +144,7 @@ myNetwork <- network(final.diablo.model, blocks = c(1,2,3,4), cutoff = 0.9)
 write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved.gml", format = "gml")
 ```
 
-### **[2.3. Cytoscape](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/3_Cytoscape_121224.R)** 
+### **[1.3. Cytoscape](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/3_Cytoscape_121224.R)** 
 In this step, you need to connect R to Cytoscape software using [RCy3 package](https://cytoscape.org/RCy3/articles/Overview-of-RCy3.html).
 
 **Key steps:** 
@@ -159,9 +158,9 @@ library(RCy3)
 createNetworkFromIgraph(my.network.conserved,"myIgraph.conserved")
 ```
 
-## 3. Network and Enrichment Analyses
+## 2. Network and Enrichment Analyses
 We performed Pathway Enrichment Analysis (PEA) including both an overrepresentation analysis (ORA) and a gene set enrichment analysis (GSEA), to reduce the complexity of data and discern the overrepresented biological pathways.
-### **[3.1. ORA/GESA](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/4_ORA_GSEA_140125.md)**
+### **[2.1. ORA/GESA](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/4_ORA_GSEA_140125.md)**
 **Key steps:** 
 ```r
 library(clusterProfiler)
@@ -278,7 +277,7 @@ for (my_strain in unique(all_DE.res$strain)){
 head(Trans.list.ORA.summary[["BPH2760"]], 5)
 head(Trans.list.GSEA.summary[["BPH2760"]], 5)
 ```
-### **[3.2. Node & Edge data](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/5_Node_Edge_data_140125.md)**
+### **[2.2. Node & Edge data](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/5_Node_Edge_data_140125.md)**
 To prepare node and edge data for network analysis, we used pairewise_termsim function in the enrichplot package in R. This function calculates the pairwise similarity of the enriched terms using Jaccard’s similarity coefficient or the similarity of gene subsets sharing between pathways.
 
 Then we wrote the function in R to convert enrichment map to dataframes which provide similarity scores, and number of strains shared individual enriched pathways representing node and edge, respectively, for the network visualization.     
@@ -352,7 +351,7 @@ all_node_trans_ORA_KEGG <- rbind(emap_to_network_df(emap_Trans.BPH2760.ORA.KEGG.
 head(all_edge_trans_ORA_KEGG, 5)
 head(all_node_trans_ORA_KEGG, 5) 
 ```
-### **[3.3. Network Visualization](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/6_Network_Analysis_140125.md)** 
+### **[2.3. Network Visualization](https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/R_script/6_Network_Analysis_140125.md)** 
 Now we can visualize the network using node and edge data from previous step. 
 
 **Key steps:**
@@ -410,8 +409,3 @@ plot_tg_trans_ORA_KEGG_3 <- tg_trans_ORA_KEGG %>%
 plot_tg_trans_ORA_KEGG_3 # with fig.height=8, fig.width=20
 ```
 
-
-
-
-
-## Case study 2 - *Klebsiella pneumoniae*
