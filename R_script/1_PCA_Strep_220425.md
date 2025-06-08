@@ -151,7 +151,7 @@ set.seed(123) # for reproducibility
                                        legend = TRUE, ellipse = T, style = "ggplot2", 
                                        size.title = rel(2.5),
                                        size.xlabel = rel(1.5), size.ylabel = rel(1.5),
-                                       title = 'Metabolome (LC-MS)')
+                                       title = 'Metabolome (GC-MS)')
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_6.png)
 
