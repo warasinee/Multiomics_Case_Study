@@ -1,4 +1,4 @@
-DIABLO - Identification of Signature Molecules of *K. pneumoniae* Serum
+DIABLO - Identification of Signature Molecules of *S. pyogenes* Serum
 Responses
 ================
 
