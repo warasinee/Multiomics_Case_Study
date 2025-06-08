@@ -1,0 +1,152 @@
+---
+title: "DIABLO - Identification of Signature Molecules of *Streptococcus pyogenes* Serum Responses"
+author: "Warasinee Mujchariyakul"
+output: html_document
+date: "2025-04-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load R packages
+```{r}
+library(mixOmics)
+library(tidyverse)
+library(igraph)
+set.seed(123) # for reproducibility
+```
+
+## Import all omics
+```{r}
+Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+```
+
+## Data for MixOmics (DIABLO)
+```{r}
+data <- list(Transcript = Strep_trans_data, 
+             Protein = Strep_prot_data, 
+             Metabolite_GC = Strep_met_GC_data)
+lapply(data, dim) # check their dimensions (60 rows)
+
+
+Y <- factor(rep(c("RPMI", "SERUM"), 30)) # set the response variable as the Y df
+summary(Y)
+```
+
+## Initial DIABLO model 
+```{r}
+design = matrix(0.1, ncol = length(data), nrow = length(data), 
+                dimnames = list(names(data), names(data)))
+diag(design) = 0 # set diagonal to 0s
+design
+```
+
+## Tuning parameters
+** [LOO-CV issue](https://mixomics-users.discourse.group/t/loo-cv-outputs-na-in-choice-ncomp/145/3) - you can look at the perf plot and decide on the number of components (Here, ncomp = 1).  
+```{r}
+# Form basic DIABLO model with  an arbitrarily high number of components (ncomp = 5)
+basic.diablo.model = block.splsda(X = data, Y = Y, ncomp = 5, design = design)
+
+# Tuning the number of components ("loo" = leave-one-out cross-validation, for small sample sizes)
+perf.diablo = perf(basic.diablo.model, validation = 'loo', nrepeat = 1) 
+plot(perf.diablo) # plot output of tuning
+# Set the optimal ncomp value
+ncomp = perf.diablo$choice.ncomp$WeightedVote["Overall.BER", "centroids.dist"] 
+# Show the optimal choice for ncomp for each dist metric
+perf.diablo$choice.ncomp$WeightedVote 
+```
+
+```{r}
+# Check output - basic DIABLO model
+plotIndiv(basic.diablo.model, ind.names=FALSE, legend=TRUE)
+plotLoadings(basic.diablo.model)
+```
+
+
+## Tuning the number of features 
+** This may take some time to run (~ 5 min)
+```{r}
+# Set grid of values for each component to test
+test.keepX = list (Transcript = seq(20,100,20), 
+                   Protein = seq(20,100,20),
+                   Metabolite_GC = seq(10,100,10)) 
+
+# Note: seq(10,100,10) = start from 10 and increase by 10 until 100
+
+# Run the feature selection tuning (ncomp = 1 - from tuning the number of components)
+tune.SA = tune.block.splsda(X = data, Y = Y, ncomp = 1, 
+                              test.keepX = test.keepX, design = design,
+                              validation = 'Mfold', folds = 5, nrepeat = 10,
+                              dist = "centroids.dist")
+# Set the optimal values of features to retain
+list.keepX = tune.SA$choice.keepX 
+list.keepX
+```
+
+
+## Final DIABLO model
+```{r}
+# Final model (use arbitrary number for # variables from our preliminary results in "Tuning the number of features")
+
+list.keepX <-  list (Transcript =  20, 
+                    Protein =  20,
+                    Metabolite_GC = 10) 
+
+# Set the optimised DIABLO model
+final.diablo.model = block.splsda(X = data, Y = Y, ncomp = 1, 
+                                  keepX = list.keepX, design = design)
+
+final.diablo.model$design # design matrix for the final model
+```
+
+## AUC for final model
+```{r}
+auc.diablo.trans.com <- auroc(final.diablo.model, roc.block = "Transcript", roc.comp = 1,
+                        print = FALSE)
+auc.diablo.prot.com <- auroc(final.diablo.model, roc.block = "Protein", roc.comp = 1,
+                        print = FALSE)
+auc.diablo.met.GC.com <- auroc(final.diablo.model, roc.block = "Metabolite_GC", roc.comp = ,
+                        print = FALSE)
+```
+
+## Extract data from final DIABLO model 
+```{r}
+# Variables selected on component 1
+trans_var <- selectVar(final.diablo.model, block = 'Transcript', comp = 1)
+prot_var <- selectVar(final.diablo.model, block = 'Protein', comp = 1)
+met_GC_var <- selectVar(final.diablo.model, block = 'Metabolite_GC', comp = 1)
+
+# Correlation matrix from the circos plot
+corMat <- circosPlot(final.diablo.model, cutoff = 0.7)
+corMat2 <- as.data.frame(corMat)
+```
+
+## Data visualization
+```{r}
+# Sample plots
+plotDiablo(final.diablo.model, ncomp = 1)
+```
+
+```{r fig.height=6, fig.width=6}
+# Plot Loadings
+plotLoadings(final.diablo.model, comp = 1, contrib = 'max', method = 'median', size.name = 0.65)
+```
+
+
+```{r fig.height=10, fig.width=10}
+# Circos plot 
+circosPlot(final.diablo.model, cutoff = 0.9, comp = 1, line = TRUE, 
+           color.blocks = c('darkorchid', 'brown1', 'lightgreen'),
+           color.cor = c("chocolate3","grey20"), size.labels = 1.2, size.variables = 0.5, size.legend = 1)
+```
+
+## Save 
+```{r fig.height=10, fig.width=10}
+# Save data for further visualization in Cytoscape
+myNetwork <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.9) 
+write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Strep.gml", format = "gml")
+```
+
