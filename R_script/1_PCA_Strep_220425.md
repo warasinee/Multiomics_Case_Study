@@ -1,5 +1,5 @@
 ## Load R packages
-
+================
 - [Load R packages](#load-r-packages)
 - [Import all omics](#import-all-omics)
 - [Data for MixOmics](#data-for-mixomics)
@@ -8,7 +8,9 @@
 - [Data visualization - Final](#data-visualization---final)
 - [Save](#save)
   
-    library(mixOmics)
+``` r
+library(mixOmics)
+```
 
     ## Loading required package: MASS
 
@@ -24,7 +26,9 @@
     ## Questions, issues: Follow the prompts at http://mixomics.org/contact-us
     ## Cite us:  citation('mixOmics')
 
-    library(tidyverse)
+``` r
+library(tidyverse)
+```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
     ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -39,21 +43,26 @@
     ## ✖ dplyr::select() masks MASS::select()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-    set.seed(123) # for reproducibility
+``` r
+set.seed(123) # for reproducibility
+```
 
 ## Import all omics
 
+``` r
     Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
     Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
     Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+```
 
 ## Data for MixOmics
 
+``` r
     data <- list(Transcript = Strep_trans_data, 
                  Protein = Strep_prot_data, 
                  Metabolite_LC = Strep_met_GC_data)
     lapply(data, dim) # check their dimensions (24 rows)
-
+```
     ## $Transcript
     ## [1]   60 2239
     ## 
