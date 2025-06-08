@@ -1,3 +1,14 @@
+ORA & GSEA
+================
+
+- [Load R packages](#load-r-packages)
+- [Import all omics](#import-all-omics)
+- [Set parameters](#set-parameters)
+- [Example for only Transcriptomics](#example-for-only-transcriptomics)
+- [For loop - ORA & GSEA analysis (All omics and all
+  strains)](#for-loop---ora--gsea-analysis-all-omics-and-all-strains)
+- [Save](#save)
+
 ## Load R packages
 
     library(clusterProfiler)
