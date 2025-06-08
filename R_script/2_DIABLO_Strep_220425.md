@@ -1,3 +1,20 @@
+DIABLO - Identification of Signature Molecules of *K. pneumoniae* Serum
+Responses
+================
+
+- [Load R packages](#load-r-packages)
+- [Import all omics](#import-all-omics)
+- [Data for MixOmics (DIABLO)](#data-for-mixomics-diablo)
+- [Initial DIABLO model](#initial-diablo-model)
+- [Tuning parameters](#tuning-parameters)
+- [Tuning the number of features](#tuning-the-number-of-features)
+- [Final DIABLO model](#final-diablo-model)
+- [AUC for final model](#auc-for-final-model)
+- [Extract data from final DIABLO
+  model](#extract-data-from-final-diablo-model)
+- [Data visualization](#data-visualization)
+- [Save](#save)
+  
 ## Load R packages
 
     library(mixOmics)
@@ -123,7 +140,7 @@ you can look at the perf plot and decide on the number of components
     perf.diablo = perf(basic.diablo.model, validation = 'loo', nrepeat = 1) 
     plot(perf.diablo) # plot output of tuning
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_1.png)
 
     # Set the optimal ncomp value
     ncomp = perf.diablo$choice.ncomp$WeightedVote["Overall.BER", "centroids.dist"] 
@@ -135,11 +152,11 @@ you can look at the perf plot and decide on the number of components
     # Check output - basic DIABLO model
     plotIndiv(basic.diablo.model, ind.names=FALSE, legend=TRUE)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_2.png)
 
     plotLoadings(basic.diablo.model)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-6-2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_3.png)
 
 ## Tuning the number of features
 
@@ -209,17 +226,17 @@ you can look at the perf plot and decide on the number of components
     auc.diablo.trans.com <- auroc(final.diablo.model, roc.block = "Transcript", roc.comp = 1,
                             print = FALSE)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_4.png)
 
     auc.diablo.prot.com <- auroc(final.diablo.model, roc.block = "Protein", roc.comp = 1,
                             print = FALSE)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-9-2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_5.png)
 
     auc.diablo.met.GC.com <- auroc(final.diablo.model, roc.block = "Metabolite_GC", roc.comp = ,
                             print = FALSE)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-9-3.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_6.png)
 
 ## Extract data from final DIABLO model
 
@@ -231,7 +248,7 @@ you can look at the perf plot and decide on the number of components
     # Correlation matrix from the circos plot
     corMat <- circosPlot(final.diablo.model, cutoff = 0.7)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_7.png)
 
     ## 
     ## adding block name to feature names in the output similarity matrix as there are similar feature names across blocks.
@@ -243,19 +260,19 @@ you can look at the perf plot and decide on the number of components
     # Sample plots
     plotDiablo(final.diablo.model, ncomp = 1)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_8.png)
 
     # Plot Loadings
     plotLoadings(final.diablo.model, comp = 1, contrib = 'max', method = 'median', size.name = 0.65)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_9.png)
 
     # Circos plot 
     circosPlot(final.diablo.model, cutoff = 0.9, comp = 1, line = TRUE, 
                color.blocks = c('darkorchid', 'brown1', 'lightgreen'),
                color.cor = c("chocolate3","grey20"), size.labels = 1.2, size.variables = 0.5, size.legend = 1)
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_10.png)
 
     ## 
     ## adding block name to feature names in the output similarity matrix as there are similar feature names across blocks.
@@ -265,6 +282,6 @@ you can look at the perf plot and decide on the number of components
     # Save data for further visualization in Cytoscape
     myNetwork <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.9) 
 
-![](2_DIABLO_Strep_220425_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_DIABLO_plot_11.png)
 
     write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Strep.gml", format = "gml")
