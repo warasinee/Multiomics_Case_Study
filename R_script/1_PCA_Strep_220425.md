@@ -1,5 +1,5 @@
 ## Load R packages
-================
+
 - [Load R packages](#load-r-packages)
 - [Import all omics](#import-all-omics)
 - [Data for MixOmics](#data-for-mixomics)
