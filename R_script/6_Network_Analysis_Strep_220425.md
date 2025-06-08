@@ -124,4 +124,4 @@ Network Analysis - Visualize interactions of enriched pathways
     # 3.2 View the plot 
     plot_tg_trans_GSEA_KEGG_3 # with fig.height=8, fig.width=20
 
-![](6_Network_Analysis_Strep_220425_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/6_Network_plot_1.png)
