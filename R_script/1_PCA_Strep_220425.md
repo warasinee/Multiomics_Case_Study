@@ -117,7 +117,7 @@ set.seed(123) # for reproducibility
     # Prot
     plotLoadings(list.final.pca[[2]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
 
-![](1_PCA_Strep_220425_files/figure-markdown_strict/unnamed-chunk-5-2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_2.png)
 
     prot.ms1.pca.var <- selectVar(list.final.pca[[2]], comp = 1)$value
     prot.ms1.pca.var$Rank <- rank(abs(prot.ms1.pca.var$value.var))
@@ -125,7 +125,7 @@ set.seed(123) # for reproducibility
     # Met - LC
     plotLoadings(list.final.pca[[3]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
 
-![](1_PCA_Strep_220425_files/figure-markdown_strict/unnamed-chunk-5-3.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_3.png)
 
     met.LC.pca.var <- selectVar(list.final.pca[[3]], comp = 1)$value
     met.LC.pca.var$Rank <- rank(abs(met.LC.pca.var$value.var))
@@ -137,7 +137,7 @@ set.seed(123) # for reproducibility
                                       size.xlabel = rel(1.5), size.ylabel = rel(1.5),
                                       title = 'Transcriptome') 
 
-![](1_PCA_Strep_220425_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_4.png)
 
     plotIndiv_pca_prot <- plotIndiv(list.final.pca[[2]], group = Y, ind.names = FALSE,
                                      legend = TRUE, ellipse = T, style = "ggplot2", 
@@ -145,7 +145,7 @@ set.seed(123) # for reproducibility
                                      size.xlabel = rel(1.5), size.ylabel = rel(1.5),
                                      title = 'Proteome')
 
-![](1_PCA_Strep_220425_files/figure-markdown_strict/unnamed-chunk-6-2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_5.png)
 
     plotIndiv_pca_met_LC <- plotIndiv(list.final.pca[[3]], group = Y, ind.names = FALSE,
                                        legend = TRUE, ellipse = T, style = "ggplot2", 
@@ -153,7 +153,7 @@ set.seed(123) # for reproducibility
                                        size.xlabel = rel(1.5), size.ylabel = rel(1.5),
                                        title = 'Metabolome (LC-MS)')
 
-![](1_PCA_Strep_220425_files/figure-markdown_strict/unnamed-chunk-6-3.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_6.png)
 
 ## Save
 
