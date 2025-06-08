@@ -105,7 +105,7 @@ set.seed(123) # for reproducibility
     # Trans
     plotLoadings(list.final.pca[[1]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
 
-![](1_PCA_Strep_220425_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_1.png)
 
     trans.pca.var <- selectVar(list.final.pca[[1]], comp = 1)$value
     trans.pca.var$Rank <- rank(abs(trans.pca.var$value.var))
