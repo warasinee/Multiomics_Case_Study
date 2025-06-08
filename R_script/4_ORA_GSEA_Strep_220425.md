@@ -104,7 +104,7 @@ ORA & GSEA
 
 ### ORA & GSEA
 
-    ## Prepare Transcriptome data / K. pneumoniae
+    ## Prepare Transcriptome data 
     my_species <- "Streptococcus pyogenes"
     my_omics <- "Transcriptomics RG"
 
