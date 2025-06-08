@@ -1,3 +1,12 @@
+Preparing node and edge data for network analysis
+================
+
+- [Load R packages](#load-r-packages)
+- [Import ORA and GSEA results for all strains and all
+  omics](#import-ora-and-gsea-results-for-all-strains-and-all-omics)
+- [Collect node and edge data](#collect-node-and-edge-data)
+- [Save](#save)
+
 ## Load R packages
 
     library(DOSE)
