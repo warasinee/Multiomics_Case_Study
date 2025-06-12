@@ -68,5 +68,5 @@ head(all_DE.df.strep)
 | 5448   |  EW021_RS00010  |   g009819	     |   -3.0151278 | 9.302070e-26 | dnaN	        | DNA polymerase III subunit beta                |
 | 5448   |  EW021_RS00015  |   g008944       |   -0.7921787 | 2.949191e-01 | EW021_RS00015| DUF951 family protein                          |
 | 5448   |  EW021_RS00020	 |   g000450       |   -1.6880047 | 5.128776e-06 | ychF         | redox-regulated ATPase YchF                    |
-| ...    |  ...            |  ...            |  ...         | 1.174015e-02                | EW021_RS00025 | aminoacyl-tRNA hydrolase       |
+| ...    |  ...            |  ...            |  ...         | ...          | ...          | ...                                            |
 
