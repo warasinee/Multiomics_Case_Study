@@ -4,7 +4,12 @@ This is a case study using the multi-omics analysis pipeline (XXX).
 
 In this study, we applied multivariate data integration methods and network analysis to previously published multi-omics datasets [(Mu et al., 2023)](https://www.nature.com/articles/s41467-023-37200-w) generated from five *Streptococcus pyogenes* genotypes exposed to human serum. 
 
-## 1. Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
+
+## Overview of our bioinformatic workflow 
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig1_workflow.png)
+Fig. 1 Overview of a bioinformatic workflow for multi-omics analyses of bacterial pathogens 
+
+## PART 1: Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
 We implemented the MixOmics data analytic pipelines including PCA and Multiblock (s)PLS-DA or DIABLO. 
 
@@ -156,7 +161,7 @@ library(RCy3)
 createNetworkFromIgraph(my.network.conserved,"myIgraph.conserved")
 ```
 
-## 2. Network and Enrichment Analyses
+## PART 2: Network and Enrichment Analyses
 We performed Pathway Enrichment Analysis (PEA) including both an overrepresentation analysis (ORA) and a gene set enrichment analysis (GSEA), to reduce the complexity of data and discern the overrepresented biological pathways.
 ### **[2.1. ORA/GESA](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/4_ORA_GSEA_Strep_220425.md)**
 **Key steps:** 
