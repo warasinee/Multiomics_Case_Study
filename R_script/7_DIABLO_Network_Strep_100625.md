@@ -1,3 +1,14 @@
+DIABLO results for network analysis
+================
+
+- [Load R packages](#load-r-packages)
+- [Import all omics](#import-all-omics)
+- [Data for MixOmics (DIABLO)](#data-for-mixomics-diablo)
+- [Initial DIABLO model](#initial-diablo-model)
+- [Tuning parameters](#tuning-parameters)
+- [Final DIABLO model](#final-diablo-model)
+
+
 ## Load R packages
 
     library(mixOmics)
