@@ -7,7 +7,12 @@ DIABLO results for network analysis
 - [Initial DIABLO model](#initial-diablo-model)
 - [Tuning parameters](#tuning-parameters)
 - [Final DIABLO model](#final-diablo-model)
-
+- [Extract loading values](#extract-loading-values)
+- [Import all omics (annotation)](#import-all-omics-annotation)
+- [Set parameters](#set-parameters)
+- [GSEA analysis](#gsea-analysis)
+- [Network plot](#network-plot)
+- [Network ananlysis to visualize interactions of enriched pathways](#network-ananlysis-to-visualize-interactions-of-enriched-pathways)
 
 ## Load R packages
 
@@ -208,16 +213,17 @@ you can look at the perf plot and decide on the number of components
 
 ![](7_DIABLO_Network_Strep_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
-## Final DIABLO model 
-# block.plsda (This method is different from block.splsda)
+## Final DIABLO model
 
+    # Here, we used block.plsda which is different from block.splsda (no variable selection)
     final.plsda.diablo <- block.plsda(data, Y, ncomp = 1, design = design)
 
     ## Design matrix has changed to include Y; each block will be
     ##             linked to Y.
 
-## Extract loading values (for ranking importanct viables)
+## Extract loading values 
 
+    # We used loading values for ranking importanct viables
     loadings_data <- final.plsda.diablo$loadings 
 
     loadings_data_trans <- loadings_data$Transcript
@@ -238,7 +244,7 @@ you can look at the perf plot and decide on the number of components
     # For ORA and GSEA
     annot_origin <- unique(all.annot$fterm_origin) %>% as.character() # Use all annotations
 
-## Prepare data for GSEA
+## GSEA analysis
 
     ## Prepare Transcriptome data
     my_species <- "Streptococcus pyogenes"
@@ -325,8 +331,9 @@ you can look at the perf plot and decide on the number of components
 
     #saveRDS(GSEA.output.trans, file = "/Users/wmujchariyak/Desktop/Strep.DIABLO.GSEA.output.trans.rds")
 
-## Network plot - DIABLO.GSEA.KEGG.sig
+## Network plot 
 
+    # Example - DIABLO.GSEA.KEGG.sig
     # 1. Prepare data
     Trans.DIABLO.GSEA.KEGG.sig <- clusterProfiler::filter(GSEA.output.trans, p.adjust < 0.05, grepl("^map", ID))
 
