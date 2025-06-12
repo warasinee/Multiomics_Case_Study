@@ -11,7 +11,7 @@ DIABLO results for network analysis
 - [Import all omics (annotation)](#import-all-omics-annotation)
 - [Set parameters](#set-parameters)
 - [GSEA analysis](#gsea-analysis)
-- [Network plot](#network-plot)
+- [Collect node and edge data](#collect-node-and-edge-data)
 - [Network ananlysis to visualize interactions of enriched pathways](#network-ananlysis-to-visualize-interactions-of-enriched-pathways)
 
 ## Load R packages
@@ -331,7 +331,7 @@ you can look at the perf plot and decide on the number of components
 
     #saveRDS(GSEA.output.trans, file = "/Users/wmujchariyak/Desktop/Strep.DIABLO.GSEA.output.trans.rds")
 
-## Network plot 
+## Collect node and edge data
 
     # Example - DIABLO.GSEA.KEGG.sig
     # 1. Prepare data
