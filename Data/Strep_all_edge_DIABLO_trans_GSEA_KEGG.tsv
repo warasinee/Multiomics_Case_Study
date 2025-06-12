@@ -1,0 +1,26 @@
+"from"	"to"	"nb_strain_with_edge"	"similarity"
+"Microbial metabolism in diverse environments"	"Ascorbate and aldarate metabolism"	1	0.228260869565217
+"Phosphotransferase system (PTS)"	"Ascorbate and aldarate metabolism"	1	0.27027027027027
+"Biosynthesis of secondary metabolites"	"Biosynthesis of amino acids"	1	0.443396226415094
+"Carbon metabolism"	"Biosynthesis of amino acids"	1	0.4
+"Metabolic pathways"	"Biosynthesis of amino acids"	1	0.236714975845411
+"Microbial metabolism in diverse environments"	"Biosynthesis of amino acids"	1	0.330188679245283
+"Carbon metabolism"	"Biosynthesis of secondary metabolites"	1	0.439655172413793
+"Galactose metabolism"	"Biosynthesis of secondary metabolites"	1	0.245901639344262
+"Metabolic pathways"	"Biosynthesis of secondary metabolites"	1	0.495192307692308
+"Microbial metabolism in diverse environments"	"Biosynthesis of secondary metabolites"	1	0.390070921985816
+"Fructose and mannose metabolism"	"Carbon metabolism"	1	0.232558139534884
+"Galactose metabolism"	"Carbon metabolism"	1	0.206521739130435
+"Metabolic pathways"	"Carbon metabolism"	1	0.273584905660377
+"Microbial metabolism in diverse environments"	"Carbon metabolism"	1	0.565656565656566
+"Galactose metabolism"	"Fructose and mannose metabolism"	1	0.421875
+"Microbial metabolism in diverse environments"	"Fructose and mannose metabolism"	1	0.238532110091743
+"Pentose and glucuronate interconversions"	"Fructose and mannose metabolism"	1	0.211538461538462
+"Metabolic pathways"	"Galactose metabolism"	1	0.231884057971014
+"Microbial metabolism in diverse environments"	"Galactose metabolism"	1	0.206896551724138
+"Pentose and glucuronate interconversions"	"Galactose metabolism"	1	0.236363636363636
+"Phosphotransferase system (PTS)"	"Galactose metabolism"	1	0.254237288135593
+"Starch and sucrose metabolism"	"Galactose metabolism"	1	0.350877192982456
+"Microbial metabolism in diverse environments"	"Metabolic pathways"	1	0.417061611374408
+"Pentose and glucuronate interconversions"	"Other glycan degradation"	1	0.208333333333333
+"Starch and sucrose metabolism"	"Phosphotransferase system (PTS)"	1	0.25
