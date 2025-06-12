@@ -208,7 +208,8 @@ you can look at the perf plot and decide on the number of components
 
 ![](7_DIABLO_Network_Strep_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
-## Final model - block.plsda (This method is different from block.splsda)
+## Final DIABLO model 
+# block.plsda (This method is different from block.splsda)
 
     final.plsda.diablo <- block.plsda(data, Y, ncomp = 1, design = design)
 
