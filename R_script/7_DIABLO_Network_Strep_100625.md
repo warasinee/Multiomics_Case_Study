@@ -211,7 +211,7 @@ you can look at the perf plot and decide on the number of components
     # Plot of the error rates based on weighted vote
     plot(perf.plsda.diablo) # plot output of tuning
 
-![](7_DIABLO_Network_Strep_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/7_DIABLO_Network_plot_1.png)
 
 ## Final DIABLO model
 
@@ -456,4 +456,4 @@ you can look at the perf plot and decide on the number of components
     # 3.2 View the plot 
     plot_tg_trans_GSEA_KEGG_3 # with fig.height=8, fig.width=20
 
-![](7_DIABLO_Network_Strep_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/7_DIABLO_Network_plot_2.png)
