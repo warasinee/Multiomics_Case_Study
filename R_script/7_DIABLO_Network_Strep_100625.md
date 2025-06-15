@@ -223,7 +223,7 @@ you can look at the perf plot and decide on the number of components
 
 ## Extract loading values 
 
-    # We used loading values for ranking importanct viables
+    # We used loading values for ranking important viables
     loadings_data <- final.plsda.diablo$loadings 
 
     loadings_data_trans <- loadings_data$Transcript
