@@ -122,7 +122,7 @@ set.seed(123) # for reproducibility
     prot.ms1.pca.var <- selectVar(list.final.pca[[2]], comp = 1)$value
     prot.ms1.pca.var$Rank <- rank(abs(prot.ms1.pca.var$value.var))
 
-    # Met - LC
+    # Met - GC
     plotLoadings(list.final.pca[[3]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_3.png)
@@ -147,7 +147,7 @@ set.seed(123) # for reproducibility
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_5.png)
 
-    plotIndiv_pca_met_LC <- plotIndiv(list.final.pca[[3]], group = Y, ind.names = FALSE,
+    plotIndiv_pca_met_GC <- plotIndiv(list.final.pca[[3]], group = Y, ind.names = FALSE,
                                        legend = TRUE, ellipse = T, style = "ggplot2", 
                                        size.title = rel(2.5),
                                        size.xlabel = rel(1.5), size.ylabel = rel(1.5),
@@ -166,5 +166,5 @@ set.seed(123) # for reproducibility
     #dev.off()
 
     #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_pca_met_GC.pdf", height = 5, width = 8)
-    #plotIndiv_pca_met_LC
+    #plotIndiv_pca_met_GC
     #dev.off()
