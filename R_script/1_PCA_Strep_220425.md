@@ -64,7 +64,7 @@ set.seed(123) # for reproducibility
 
     data <- list(Transcript = Strep_trans_data, 
                  Protein = Strep_prot_data, 
-                 Metabolite_LC = Strep_met_GC_data)
+                 Metabolite_GC = Strep_met_GC_data)
     lapply(data, dim) # check their dimensions (24 rows)
 
     ## $Transcript
@@ -73,7 +73,7 @@ set.seed(123) # for reproducibility
     ## $Protein
     ## [1]  60 993
     ## 
-    ## $Metabolite_LC
+    ## $Metabolite_GC
     ## [1]  60 129
 
     Y <- factor(rep(c("RPMI", "SERUM"), 30)) # set the response variable as the Y df
@@ -84,7 +84,7 @@ set.seed(123) # for reproducibility
 
 ## PCA
 
-    data_name <- c("Transcript", "Protein", "Metabolite_LC")
+    data_name <- c("Transcript", "Protein", "Metabolite_GC")
     list.final.pca <- list()
     plot.tune.pca <- list()
     pca.cum.var <- list()
@@ -127,8 +127,8 @@ set.seed(123) # for reproducibility
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/1_PCA_plot_3.png)
 
-    met.LC.pca.var <- selectVar(list.final.pca[[3]], comp = 1)$value
-    met.LC.pca.var$Rank <- rank(abs(met.LC.pca.var$value.var))
+    met.GC.pca.var <- selectVar(list.final.pca[[3]], comp = 1)$value
+    met.GC.pca.var$Rank <- rank(abs(met.GC.pca.var$value.var))
 
 ## Data visualization - Final
 
@@ -165,6 +165,6 @@ set.seed(123) # for reproducibility
     #plotIndiv_pca_prot
     #dev.off()
 
-    #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_pca_met_LC.pdf", height = 5, width = 8)
+    #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_pca_met_GC.pdf", height = 5, width = 8)
     #plotIndiv_pca_met_LC
     #dev.off()
