@@ -1,3 +1,14 @@
+PLS & PLS-DA
+================
+
+- [Load R packages](#load-r-packages)
+- [Import all omics](#import-all-omics)
+- [Data for MixOmics](#data-for-mixomics)
+- [Pairwise PLS Comparisons (ncomp=1)](#pairwise-pls-comparisons-ncomp1)
+- [sPLS-DA: based on conditions](#spls-da-based-on-conditions)
+- [sPLS-DA: based on strains](#spls-da-based-on-strains)
+- [Save](#save)
+
 ## Load R packages
 
     library(mixOmics)
@@ -460,7 +471,7 @@ a small subset of variables relevant to discriminate each class.
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_12.png)
-\## Save
+## Save
 
     #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_trans.pdf", height = 5, width = 8)
     #plotIndiv_trans
