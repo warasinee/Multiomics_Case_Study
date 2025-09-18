@@ -136,7 +136,7 @@ a small subset of variables relevant to discriminate each class.
 
     plot(perf.plsda.trans, sd = TRUE, legend.position = 'horizontal')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_1.png)
 
     # The error rate decreases and reaches a minimum for ncomp = 2 for the max.dist distance. These parameters will be included in further analyses.
 
@@ -148,7 +148,7 @@ a small subset of variables relevant to discriminate each class.
               title = 'PLS-DA on Transcriptome comp 1-2',
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-5-2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_2.png)
 
     ######################################
     ## Proteomics 
@@ -198,7 +198,7 @@ a small subset of variables relevant to discriminate each class.
 
     plot(perf.plsda.prot, sd = TRUE, legend.position = 'horizontal')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-5-3.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_3.png)
 
     # The error rate decreases and reaches a minimum for ncomp = 1 for the max.dist distance. These parameters will be included in further analyses.
 
@@ -210,7 +210,7 @@ a small subset of variables relevant to discriminate each class.
               title = 'PLS-DA on Proteome comp 1-2',
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-5-4.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_4.png)
 
     ######################################
     ## Met - sPLS-DA
@@ -260,7 +260,7 @@ a small subset of variables relevant to discriminate each class.
 
     plot(perf.plsda.met, sd = TRUE, legend.position = 'horizontal')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-5-5.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_5.png)
 
     # The error rate decreases and reaches a minimum for ncomp = 1 for the max.dist distance. These parameters will be included in further analyses.
 
@@ -272,7 +272,7 @@ a small subset of variables relevant to discriminate each class.
               title = 'PLS-DA on Metabolome comp 1-2',
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-5-6.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_6.png)
 
 ## sPLS-DA: based on strains
 
@@ -323,7 +323,7 @@ a small subset of variables relevant to discriminate each class.
 
     plot(perf.plsda.trans.2, sd = TRUE, legend.position = 'horizontal')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-6-1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_7.png)
 
     # The error rate decreases and reaches a minimum for ncomp = 4 for the max.dist distance. These parameters will be included in further analyses.
 
@@ -335,7 +335,7 @@ a small subset of variables relevant to discriminate each class.
               title = 'PLS-DA on Transcriptome comp 1-2',
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-6-2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_8.png)
 
     ######################################
     ## Proteomics 
@@ -385,7 +385,7 @@ a small subset of variables relevant to discriminate each class.
 
     plot(perf.plsda.prot.2, sd = TRUE, legend.position = 'horizontal')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-6-3.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_9.png)
 
     # The error rate decreases and reaches a minimum for ncomp = 5 for the max.dist distance. These parameters will be included in further analyses.
 
@@ -397,7 +397,7 @@ a small subset of variables relevant to discriminate each class.
               title = 'PLS-DA on Proteome comp 1-2',
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-6-4.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_10.png)
 
     ######################################
     ## Met - sPLS-DA
@@ -447,19 +447,19 @@ a small subset of variables relevant to discriminate each class.
 
     plot(perf.plsda.met.2, sd = TRUE, legend.position = 'horizontal')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-6-5.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_11.png)
 
     # The error rate decreases and reaches a minimum for ncomp = 5 for the max.dist distance. These parameters will be included in further analyses.
 
     # Final model
-    final.plsda.met.2 <- plsda(X.met,Y2, ncomp = 5) # we use ncomp =2 so that we can visualize with plotIndiv
+    final.plsda.met.2 <- plsda(X.met,Y2, ncomp = 5) 
 
     plotIndiv_met.2 <- plotIndiv(final.plsda.met.2, ind.names = F, legend=TRUE,
               comp=c(1,2), ellipse = TRUE, 
               title = 'PLS-DA on Metabolome comp 1-2',
               X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
 
-![](2_PLS_Strep_160925_files/figure-markdown_strict/unnamed-chunk-6-6.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Report_plots/2_PLS_12.png)
 \## Save
 
     #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_trans.pdf", height = 5, width = 8)
