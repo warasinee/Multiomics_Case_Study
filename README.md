@@ -12,7 +12,7 @@ Fig. 1 Overview of the bioinformatic workflow for multi-omics analysis of bacter
 
 ## PART 1: Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
-We began by implementing single- and multi-omic analysis methods (PCA and Multiblock (s)PLS-DA or DIABLO) through MixOmics. 
+We began by implementing single- and multi-omic analysis methods (PCA and Multiblock (s)PLS-DA or DIABLO) through `mixOmics`. 
 
 ### **[1.1. PCA](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/1_PCA_Strep_220425.md)** 
 Initially, we performed Principal Component Analysis (PCA), a dimensionality reduction and unsupervised machine learning method, to assess the response of *S. pyogenes* to distinct media conditions (Serum and RPMI).  
@@ -116,11 +116,7 @@ list.keepX
 #######################################
 
 # Final DIABLO model
-# Final model (use arbitrary number for # variables from our preliminary results in "Tuning the number of features")
-
-list.keepX <-  list (Transcript =  20, 
-                    Protein =  20,
-                    Metabolite_GC = 10) 
+# Final model (use the optimal number of components (ncomp) and features (list.keepX) identified by tuning)
 
 # Set the optimised DIABLO model
 final.diablo.model = block.splsda(X = data, Y = Y, ncomp = 1, 
@@ -131,8 +127,10 @@ final.diablo.model$design # design matrix for the final model
 #######################################
 
 # AUC for the model (Example)
-auc.diablo.trans.com <- auroc(final.diablo.model, roc.block = "Transcript", roc.comp = 1,
-                        print = FALSE)
+auc.diablo.trans.com <- auroc(final.diablo.model, 
+  roc.block = "Transcript", 
+  roc.comp = 1,
+  print = FALSE)
 
 #######################################
 
@@ -160,17 +158,17 @@ corMat2 <- as.data.frame(corMat)
 # Save data for further visualization in Cytoscape
 library(igraph)
 myNetwork <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.9) 
-write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved.gml", format = "gml")
+write_graph(myNetwork$gR, file = "myNetwork_conserved.gml", format = "gml")
 ```
 
 ### **[1.3. Cytoscape](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/3_Cytoscape_Strep_220425.R)** 
-In this step, you need to connect R to Cytoscape software using [RCy3 package](https://cytoscape.org/RCy3/articles/Overview-of-RCy3.html).
+In this step, you need to connect R to Cytoscape using [RCy3 package](https://cytoscape.org/RCy3/articles/Overview-of-RCy3.html).
 
 **Key steps:** 
 ```r
 # Import .gml file (output from MixOmics (DIABLO))
 library(igraph)
-my.network.conserved <- igraph::read_graph("Path_to_file/myNetwork_conserved.gml",format=c("gml"))
+my.network.conserved <- igraph::read_graph("myNetwork_conserved.gml",format=c("gml"))
 
 # From igraph to Cytoscape (Now you will see the network in Cytoscape)
 library(RCy3)
@@ -178,8 +176,9 @@ createNetworkFromIgraph(my.network.conserved,"myIgraph.conserved")
 ```
 
 ## PART 2: Network and Enrichment Analyses
-We performed Pathway Enrichment Analysis (PEA) including both an overrepresentation analysis (ORA) and a gene set enrichment analysis (GSEA), to reduce the complexity of data and discern the overrepresented biological pathways.
+Next, we use the `clusterProfiler` package to perform Pathway Enrichment Analysis (PEA), including both an overrepresentation analysis (ORA) and a gene set enrichment analysis (GSEA), to reduce the complexity of data and discern the overrepresented biological pathways.
 ### **[2.1. ORA/GESA](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/4_ORA_GSEA_Strep_220425.md)**
+
 **Key steps:** 
 ```r
 library(clusterProfiler)
@@ -302,10 +301,11 @@ for (my_strain in unique(all_DE.res$strain)){
 head(Trans.list.ORA.summary[["5448"]], 5)
 head(Trans.list.GSEA.summary[["5448"]], 5)
 ```
-### **[2.2. Node & Edge data](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/5_Node_Edge_data_Strep_220425.md)**
-To prepare node and edge data for network analysis, we used pairewise_termsim function in the enrichplot package in R. This function calculates the pairwise similarity of the enriched terms using Jaccard’s similarity coefficient or the similarity of gene subsets sharing between pathways.
 
-Then we wrote the function in R to convert enrichment map to dataframes which provide similarity scores, and number of strains shared individual enriched pathways representing node and edge, respectively, for the network visualization.     
+### **[2.2. Node & Edge data](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/5_Node_Edge_data_Strep_220425.md)**
+To prepare node and edge data for network analysis, we used the `pairewise_termsim` function in the `enrichplot` package in R. This function calculates the pairwise similarity of the enriched terms using Jaccard’s similarity coefficient or the similarity of gene subsets sharing between pathways.
+
+We used the function defined below to convert the enrichment map to dataframes which provide similarity scores, and number of strains shared individual enriched pathways representing node and edge, respectively, for the network visualization.     
 
 **Key steps:**  
 ```r
