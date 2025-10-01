@@ -1,20 +1,21 @@
 # Multi-omics: Case Study 
 
-This is a case study using the multi-omics analysis pipeline (XXX). 
+This is a walkthrough of the case study using the multi-omics analysis pipeline described [here] (XXX). 
 
-In this study, we applied multivariate data integration methods and network analysis to previously published multi-omics datasets [(Mu et al., 2023)](https://www.nature.com/articles/s41467-023-37200-w) generated from five *Streptococcus pyogenes* genotypes exposed to human serum. 
+In this study, we applied multivariate data integration methods and network analysis to a previously published multi-omic dataset ([Mu et al., 2023](https://www.nature.com/articles/s41467-023-37200-w)) generated from five *Streptococcus pyogenes* genotypes grown in RPMI with and without human serum.  
 
+Cloning this repository will download the walkthrough, all analysis scripts, and the test dataset.  
 
 ## Overview of our bioinformatic workflow 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig1_workflow.png)
-Fig. 1 Overview of a bioinformatic workflow for multi-omics analyses of bacterial pathogens 
+Fig. 1 Overview of the bioinformatic workflow for multi-omics analysis of bacterial pathogens 
 
 ## PART 1: Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
-We implemented the MixOmics data analytic pipelines including PCA and Multiblock (s)PLS-DA or DIABLO. 
+We began by implementing single- and multi-omic analysis methods (PCA and Multiblock (s)PLS-DA or DIABLO) through MixOmics. 
 
 ### **[1.1. PCA](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/1_PCA_Strep_220425.md)** 
-Initially, Principal Component Analysis (PCA), a dimensionality reduction and unsupervised machine learning method, was performed to assess the similarities of bacterial responses to distinct media conditions (Serum and RPMI).  
+Initially, we performed Principal Component Analysis (PCA), a dimensionality reduction and unsupervised machine learning method, to assess the response of *S. pyogenes* to distinct media conditions (Serum and RPMI).  
 
 **Key steps:** 
 ```r
@@ -48,17 +49,18 @@ for (i in seq_along(data_name)){
   list.final.pca[[i]] <- final.pca
 }
 
-# Note: Results from "tune.pca" suggest that using 3 components can cover almost 50% of variation in the datasets
+# Note: Results from "tune.pca" suggest that using 3 components will describe almost 50% of variation in the datasets
 
-# Visualization 
-# Trans
+# Visualise loadings
 plotLoadings(list.final.pca[[1]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
 
 ```
 
 ### **[1.2. DIABLO](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/2_DIABLO_Strep_220425.md)** 
-Here, we performed integrative supervised analysis using Data Integration Analysis for Biomarker discovery using Latent cOmponents (DIABLO), providing highly correlated variables from omics datasets discriminating *S. aureus* responses under two different conditions (Serum and RPMI).
-This script contains all steps to identify signature molecules of *S. aureus* serum responses, including generating basic DIABLO model, tuning the number of components, and creating final DIABLO model.
+Next, we performed integrative supervised analysis using Data Integration Analysis for Biomarker discovery using Latent cOmponents (DIABLO), which identified highly correlated variables from multiple 'omic layers which discriminate *S. pyogenes* responses between conditions.  
+This script perfroms all steps to identify signature molecules of *S. pyogenes* serum responses, including generating the basic DIABLO model, tuning the number of components, and creating final DIABLO model.  
+
+NOTE: the tuning steps may take some time to run (15-20 minutes).
 
 **Key steps:** 
 ```r
@@ -72,15 +74,19 @@ data <- list(Transcript = Strep_trans_data,
 lapply(data, dim) # check their dimensions (60 rows)
 Y <- factor(rep(c("RPMI", "SERUM"), 30)) # set the response variable as the Y df
 summary(Y)
+
 #######################################
+
 # Initial DIABLO model
 design = matrix(0.1, ncol = length(data), nrow = length(data), 
                 dimnames = list(names(data), names(data)))
 diag(design) = 0 # set diagonal to 0s
 design
+
 #######################################
+
 # Tuning parameters - number of components and number of features 
-# Form basic DIABLO model with  an arbitrarily high number of components (ncomp = 5)
+# Form basic DIABLO model with an arbitrarily high number of components (ncomp = 5)
 basic.diablo.model = block.splsda(X = data, Y = Y, ncomp = 5, design = design)
 
 ## 1. Tuning the number of components ("loo" = leave-one-out cross-validation, for small sample sizes)
@@ -89,7 +95,7 @@ perf.diablo = perf(basic.diablo.model, validation = 'loo', nrepeat = 1)
 plot(perf.diablo) # select ncomp = 1
 
 ## 2. Tuning the number of features 
-** This may take some time to run (~ 15-20 min)
+# This may take some time to run (~ 15-20 min)
 
 # Set grid of values for each component to test
 test.keepX = list (Transcript = seq(20,100,20), 
@@ -106,7 +112,9 @@ tune.SA = tune.block.splsda(X = data, Y = Y, ncomp = 1,
 # Set the optimal values of features to retain
 list.keepX = tune.SA$choice.keepX 
 list.keepX 
+
 #######################################
+
 # Final DIABLO model
 # Final model (use arbitrary number for # variables from our preliminary results in "Tuning the number of features")
 
@@ -119,11 +127,15 @@ final.diablo.model = block.splsda(X = data, Y = Y, ncomp = 1,
                                   keepX = list.keepX, design = design)
 
 final.diablo.model$design # design matrix for the final model
+
 #######################################
+
 # AUC for the model (Example)
 auc.diablo.trans.com <- auroc(final.diablo.model, roc.block = "Transcript", roc.comp = 1,
                         print = FALSE)
+
 #######################################
+
 # Visualization
 ## 1. Sample plots
 plotDiablo(final.diablo.model, ncomp = 1)
@@ -133,14 +145,18 @@ plotLoadings(final.diablo.model, comp = 1, contrib = 'max', method = 'median', s
 circosPlot(final.diablo.model, cutoff = 0.9, comp = 1, line = TRUE, 
            color.blocks = c('darkorchid', 'brown1', 'lightgreen'),
            color.cor = c("chocolate3","grey20"), size.labels = 1.2, size.variables = 0.5, size.legend = 1)
+
 #######################################
+
 # Extract data from final DIABLO model
 ## 1. Variables selected on component 1
 trans_var <- selectVar(final.diablo.model, block = 'Transcript', comp = 1)
 ## 2. Correlation matrix from the circos plot
 corMat <- circosPlot(final.diablo.model, cutoff = 0.7)
 corMat2 <- as.data.frame(corMat)
+
 #######################################
+
 # Save data for further visualization in Cytoscape
 library(igraph)
 myNetwork <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.9) 
@@ -249,6 +265,7 @@ for (my_strain in unique(all_DE.res$strain)){
     merge(., ORA_logFC_summary, by.x = "ID", by.y = "fterm_id") 
   
 ###############
+
   # GSEA analysis
   GSEA.df <- all_DE.res %>%
     filter(is_species_core %in% is_core_accessory ) %>%
@@ -278,7 +295,9 @@ for (my_strain in unique(all_DE.res$strain)){
     mutate(experiment = my_omics) %>%
     merge(., term_to_name.df, by.x = "ID", by.y = "fterm_id", all.x = T) 
 }
+
 #######################################
+
 # Check the results 
 head(Trans.list.ORA.summary[["5448"]], 5)
 head(Trans.list.GSEA.summary[["5448"]], 5)
