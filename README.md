@@ -15,7 +15,7 @@ This repository is a reproducible walkthrough of a multi-omics integration and e
 Fig. 1 Overview of the bioinformatic workflow for multi-omics analysis of bacterial pathogens 
 
 ## Installation & Dependencies
-Cloning this repository will download the walkthrough, all analysis scripts, and the test dataset.  
+Cloning this repository will download the walkthrough, all analysis scripts, and the test dataset from ([Mu et al., 2023](https://www.nature.com/articles/s41467-023-37200-w)).  
 You will also need to install:
 
 ### Core R Version
