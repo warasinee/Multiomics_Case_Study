@@ -1,7 +1,7 @@
 # Multi-omics: Case Study 
 
 This repository is a reproducible walkthrough of a multi-omics integration and enrichment analysis pipeline. It demonstrates:
-- Unsupervised data exploration (PCA and PLS via `mixOmics)
+- Unsupervised data exploration (PCA and PLS via `mixOmics`)
 - Supervised data exploration (PLS-DA via `mixOmics`)
 - Supervised multi-block integration (DIABLO via `mixOmics`)
 - Functional enrichment (ORA & GSEA via `clusterProfiler` and `DOSE`)
