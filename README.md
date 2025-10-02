@@ -39,8 +39,7 @@ BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
 ```
 
 ### External
-- Cytoscape (≥ 3.9 recommended) for RCy3 steps
-- 
+- Cytoscape (≥ 3.9 recommended) for interactive network visualisation
 ---
 
 ## PART 1: Multi-omics Data Exporation and Integration Using MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
