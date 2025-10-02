@@ -1,16 +1,49 @@
 # Multi-omics: Case Study 
 
-This is a walkthrough of the case study using the multi-omics analysis pipeline described [here] (XXX). 
+This repository is a reproducible walkthrough of a multi-omics integration and enrichment analysis pipeline. It demonstrates:
+- Unsupervised data exploration (PCA and PLS via `mixOmics)
+- Supervised data exploration (PLS-DA via `mixOmics`)
+- Supervised multi-block integration (DIABLO via `mixOmics`)
+- Functional enrichment (ORA & GSEA via `clusterProfiler` and `DOSE`)
+- Network derivation (DIABLO variable correlation & enrichment similarity)
+- Network integratation and visualization (Cytoscape + R graph packages + a Shiny app)
 
-In this study, we applied multivariate data integration methods and network analysis to a previously published multi-omic dataset ([Mu et al., 2023](https://www.nature.com/articles/s41467-023-37200-w)) generated from five *Streptococcus pyogenes* genotypes grown in RPMI with and without human serum.  
-
-Cloning this repository will download the walkthrough, all analysis scripts, and the test dataset.  
+> Goal: Provide a practival ressource for bacterial pathogen multi-omics integration and interpretation.
 
 ## Overview of our bioinformatic workflow 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig1_workflow.png)
 Fig. 1 Overview of the bioinformatic workflow for multi-omics analysis of bacterial pathogens 
 
-## PART 1: Multi-omics Integration by MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
+## Installation & Dependencies
+Cloning this repository will download the walkthrough, all analysis scripts, and the test dataset.  
+You will also need to install:
+
+### Core R Version
+R >= 4.2 (recommended)
+
+### CRAN Packages
+mixOmics, tidyverse, igraph, ggraph, tidygraph, shiny, shinythemes, conflicted, MASS, lattice
+
+### Bioconductor Packages
+RCy3, DOSE, clusterProfiler, enrichplot
+
+### Suggested code to install all R libraries 
+```r
+install.packages(c(
+  "mixOmics", "tidyverse", "igraph", "ggraph",
+  "tidygraph", "shiny", "shinythemes", "conflicted", "MASS", "lattice"
+))
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
+```
+
+### External
+- Cytoscape (≥ 3.9 recommended) for RCy3 steps
+- 
+---
+
+## PART 1: Multi-omics Data Exporation and Integration Using MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
 We began by implementing single- and multi-omic analysis methods (PCA and Multiblock (s)PLS-DA or DIABLO) through `mixOmics`. 
 
