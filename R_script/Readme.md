@@ -1,6 +1,6 @@
 # Format of input data for each step 
 ## 1. Multi-omics Integration by MixOmics 
-### 1.1. Nomalized data :shipit:
+### 1.1. Nomalised data :shipit:
 
 ```
 head(Strep_trans_data)
