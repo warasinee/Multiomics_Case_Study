@@ -207,10 +207,10 @@ library(RCy3)
 createNetworkFromIgraph(my.igraph.network,"myIgraph.Strep")
 ```
 
-![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/myIgraph.Strep_01.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig2_cytoscape_1.png)
 Fig. 2 Initial Cytoscape network visualisation
 
-![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/myIgraph.Strep_02.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig3_cytoscape_2.png)
 Fig. 3 Adjusted Cytoscape network visualisation with optimised features (e.g., layout, node, edge, label)
 
 ## PART 2: Network and Enrichment Analyses
