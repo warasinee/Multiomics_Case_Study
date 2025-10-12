@@ -206,6 +206,7 @@ my.network.conserved <- igraph::read_graph("myNetwork_conserved.gml",format=c("g
 library(RCy3)
 createNetworkFromIgraph(my.network.conserved,"myIgraph.conserved")
 ```
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/myIgraph.Strep_01.png)
 
 ## PART 2: Network and Enrichment Analyses
 Next, we use the `clusterProfiler` package to perform Pathway Enrichment Analysis (PEA), including both an overrepresentation analysis (ORA) and a gene set enrichment analysis (GSEA), to reduce the complexity of data and discern the overrepresented biological pathways.
