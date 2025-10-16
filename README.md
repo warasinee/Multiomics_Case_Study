@@ -14,6 +14,12 @@ This repository is a reproducible walkthrough of a multi-omics integration and e
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig1_workflow.png)
 Fig. 1 Overview of the bioinformatic workflow for multi-omics analysis of bacteria 
 
+## Workflow applications 
+<p align = "center">
+<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig2_applications.png" width=70% height=70%>
+  
+Fig. 2 Overview of our workflow applications in diverse contexts
+
 ## Installation & Dependencies
 Cloning this repository will download the walkthrough, all analysis scripts, and the test dataset from ([Mu et al., 2023](https://www.nature.com/articles/s41467-023-37200-w)).  
 You will also need to install:
@@ -208,10 +214,10 @@ createNetworkFromIgraph(my.igraph.network,"myIgraph.Strep")
 ```
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig2_cytoscape_1.png)
-Fig. 2 Initial Cytoscape network visualisation
+Fig. 3 Initial Cytoscape network visualisation
 
 ![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig3_cytoscape_2.png)
-Fig. 3 Adjusted Cytoscape network visualisation with optimised features (e.g., layout, node, edge, label)
+Fig. 4 Adjusted Cytoscape network visualisation with optimised features (e.g., layout, node, edge, label)
 
 ## PART 2: Network and Enrichment Analyses
 Next, we use the `clusterProfiler` package to perform Pathway Enrichment Analysis (PEA), including both an overrepresentation analysis (ORA) and a gene set enrichment analysis (GSEA), to reduce the complexity of data and discern the overrepresented biological pathways.
