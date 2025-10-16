@@ -48,6 +48,17 @@ BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
 - Cytoscape (≥ 3.9 recommended) for interactive network visualisation
 ---
 
+## Data preprocessing
+1. Transcriptome (RNA-seq data)
+    - A web application for RNA-seq exploration, analysis and visualisation - [Degust](https://degust.erc.monash.edu/)
+    - R packages for data normalisation and Differentially Expression (DE) Analysis - Limma/Voom, edgeR, DESeq
+2. Proteome (Mass spectrometry data)
+   - Softwares for quantification - [MaxQuant](https://maxquant.org/) 
+3. Metabolome (Mass spectrometry data)
+    - A web application for data normalization, analysis and visualisation - [MetaboAnalyst](https://www.metaboanalyst.ca/)
+    - R packages for raw data preprocessing - [XCMS](https://www.bioconductor.org/packages/devel/bioc/vignettes/xcms/inst/doc/xcms.html#1_Introduction)
+    - Softwares for raw data preprocessing, data normalization, analysis and visualisation - [MZmine 3](https://mzmine.github.io/development.html)
+
 ## PART 1: Multi-omics Data Exporation and Integration Using MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
 We began by implementing single- and multi-omic analysis methods (PCA and Multiblock (s)PLS-DA or DIABLO) through `mixOmics`. 
