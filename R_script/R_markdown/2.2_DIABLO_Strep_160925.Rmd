@@ -151,7 +151,7 @@ circosPlot(final.diablo.model, cutoff = 0.9, comp = 1, line = TRUE,
 ```{r fig.height=10, fig.width=10}
 # Save data for further visualization in Cytoscape
 myNetwork <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.9) 
-#write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Strep.gml", format = "gml")
+#write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Strep_05.gml", format = "gml")
 ```
 
 ## loading values + Gene name 
