@@ -1,0 +1,246 @@
+---
+title: "(s)PLS and (s)PLS-DA"
+author: "Warasinee Mujchariyakul"
+output: md_document
+date: "2025-09-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load R packages
+```{r}
+library(mixOmics)
+library(tidyverse)
+set.seed(123) # for reproducibility
+```
+
+
+## Import all omics
+```{r}
+Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+```
+
+
+## Data for MixOmics 
+```{r}
+data <- list(Transcript = Strep_trans_data, 
+             Protein = Strep_prot_data, 
+             Metabolite_GC = Strep_met_GC_data)
+lapply(data, dim) # check their dimensions (24 rows)
+
+
+Y <- factor(rep(c("RPMI", "SERUM"), 30)) # set the response variable as the Y df (based on conditions)
+Y2 <- factor(rep(c("5448_1", "HKU419","PS003","PS006","SP444"), each = 12)) # set the response variable as the Y df  (based on strains)
+```
+
+
+# Pairwise PLS Comparisons (ncomp=1) 
+** Calculate correlation between omics datasets which can be beneficial for setting of design matrix 
+```{r}
+# generate pairwise PLS models 
+pls1 <- pls(data$Transcript, data$Protein, ncomp = 1) 
+pls2 <- pls(data$Protein, data$Metabolite_GC, ncomp = 1)
+pls3 <- pls(data$Transcript, data$Metabolite_GC, ncomp = 1)
+
+# calculate correlation 
+cor(pls1$variates$X, pls1$variates$Y) #cor trans vs prot = 0.9319566 
+cor(pls2$variates$X, pls2$variates$Y) #cor prot vs met_GC = 0.9127586
+cor(pls3$variates$X, pls3$variates$Y) #cor trans vs met_GC = 0.9343444
+```
+
+
+## sPLS-DA: based on conditions
+** An sPLS-DA analysis will help refine the sample clusters and select a small subset of variables relevant to discriminate each class. 
+```{r}
+## Transcript 
+# Load the data
+X.trans <- data$Transcript
+dim(X.trans); length(Y)
+
+# Initial model
+plsda.trans <- plsda(X.trans,Y, ncomp = 10)
+
+# Tuning number of components
+perf.plsda.trans <- perf(plsda.trans, validation = 'loo', 
+                  progressBar = FALSE,  # Set to TRUE to track progress
+                  nrepeat = 1)    
+
+head(perf.plsda.trans$error.rate) 
+plot(perf.plsda.trans, sd = TRUE, legend.position = 'horizontal')
+# The error rate decreases and reaches a minimum for ncomp = 2 for the max.dist distance. These parameters will be included in further analyses.
+
+# Final model
+final.plsda.trans <- plsda(X.trans,Y, ncomp = 2)
+
+plotIndiv_trans <- plotIndiv(final.plsda.trans, ind.names = T, legend=TRUE,
+          comp=c(1,2), ellipse = TRUE, 
+          title = 'PLS-DA on Transcriptome comp 1-2',
+          X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
+
+######################################
+## Proteomics 
+# Load the data
+X.prot <- data$Protein
+dim(X.prot); length(Y)
+
+# Initial model
+plsda.prot <- plsda(X.prot,Y, ncomp = 10)
+
+# Tuning number of components
+perf.plsda.prot <- perf(plsda.prot, validation = 'loo', 
+                  progressBar = FALSE,  # Set to TRUE to track progress
+                  nrepeat = 1)    
+
+head(perf.plsda.prot$error.rate) 
+plot(perf.plsda.prot, sd = TRUE, legend.position = 'horizontal')
+# The error rate decreases and reaches a minimum for ncomp = 1 for the max.dist distance. These parameters will be included in further analyses.
+
+# Final model
+final.plsda.prot <- plsda(X.prot,Y, ncomp = 2) # we use ncomp =2 so that we can visualize with plotIndiv
+
+plotIndiv_prot <- plotIndiv(final.plsda.prot, ind.names = T, legend=TRUE,
+          comp=c(1,2), ellipse = TRUE, 
+          title = 'PLS-DA on Proteome comp 1-2',
+          X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
+
+######################################
+## Met - sPLS-DA
+# Load the data
+X.met <- data$Metabolite_GC
+dim(X.met); length(Y)
+
+# Initial model
+plsda.met <- plsda(X.met,Y, ncomp = 10)
+
+# Tuning number of components
+perf.plsda.met <- perf(plsda.met, validation = 'loo', 
+                  progressBar = FALSE,  # Set to TRUE to track progress
+                  nrepeat = 1)    
+
+head(perf.plsda.met$error.rate) 
+plot(perf.plsda.met, sd = TRUE, legend.position = 'horizontal')
+# The error rate decreases and reaches a minimum for ncomp = 1 for the max.dist distance. These parameters will be included in further analyses.
+
+# Final model
+final.plsda.met <- plsda(X.met,Y, ncomp = 2) # we use ncomp =2 so that we can visualize with plotIndiv
+
+plotIndiv_met <- plotIndiv(final.plsda.met, ind.names = T, legend=TRUE,
+          comp=c(1,2), ellipse = TRUE, 
+          title = 'PLS-DA on Metabolome comp 1-2',
+          X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
+
+
+```
+
+
+## sPLS-DA: based on strains
+```{r}
+## Transcript 
+# Load the data
+X.trans <- data$Transcript
+dim(X.trans); length(Y2)
+
+# Initial model
+plsda.trans.2 <- plsda(X.trans,Y2, ncomp = 10)
+
+# Tuning number of components
+perf.plsda.trans.2 <- perf(plsda.trans.2, validation = 'loo', 
+                  progressBar = FALSE,  # Set to TRUE to track progress
+                  nrepeat = 1)    
+
+head(perf.plsda.trans.2$error.rate) 
+plot(perf.plsda.trans.2, sd = TRUE, legend.position = 'horizontal')
+# The error rate decreases and reaches a minimum for ncomp = 4 for the max.dist distance. These parameters will be included in further analyses.
+
+# Final model
+final.plsda.trans.2 <- plsda(X.trans,Y2, ncomp = 4)
+
+plotIndiv_trans.2 <- plotIndiv(final.plsda.trans.2, ind.names = F, legend=TRUE,
+          comp=c(1,2), ellipse = TRUE, 
+          title = 'PLS-DA on Transcriptome comp 1-2',
+          X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
+
+######################################
+## Proteomics 
+# Load the data
+X.prot <- data$Protein
+dim(X.prot); length(Y2)
+
+# Initial model
+plsda.prot.2 <- plsda(X.prot,Y2, ncomp = 10)
+
+# Tuning number of components
+perf.plsda.prot.2 <- perf(plsda.prot.2, validation = 'loo', 
+                  progressBar = FALSE,  # Set to TRUE to track progress
+                  nrepeat = 1)    
+
+head(perf.plsda.prot.2$error.rate) 
+plot(perf.plsda.prot.2, sd = TRUE, legend.position = 'horizontal')
+# The error rate decreases and reaches a minimum for ncomp = 5 for the max.dist distance. These parameters will be included in further analyses.
+
+# Final model
+final.plsda.prot.2 <- plsda(X.prot,Y2, ncomp = 5) 
+
+plotIndiv_prot.2 <- plotIndiv(final.plsda.prot.2, ind.names = F, legend=TRUE,
+          comp=c(1,2), ellipse = TRUE, 
+          title = 'PLS-DA on Proteome comp 1-2',
+          X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
+
+######################################
+## Met - sPLS-DA
+# Load the data
+X.met <- data$Metabolite_GC
+dim(X.met); length(Y2)
+
+# Initial model
+plsda.met.2 <- plsda(X.met,Y2, ncomp = 10)
+
+# Tuning number of components
+perf.plsda.met.2 <- perf(plsda.met.2, validation = 'loo', 
+                  progressBar = FALSE,  # Set to TRUE to track progress
+                  nrepeat = 1)    
+
+head(perf.plsda.met.2$error.rate) 
+plot(perf.plsda.met.2, sd = TRUE, legend.position = 'horizontal')
+# The error rate decreases and reaches a minimum for ncomp = 5 for the max.dist distance. These parameters will be included in further analyses.
+
+# Final model
+final.plsda.met.2 <- plsda(X.met,Y2, ncomp = 5) # we use ncomp =2 so that we can visualize with plotIndiv
+
+plotIndiv_met.2 <- plotIndiv(final.plsda.met.2, ind.names = F, legend=TRUE,
+          comp=c(1,2), ellipse = TRUE, 
+          title = 'PLS-DA on Metabolome comp 1-2',
+          X.label = 'PLS-DA comp 1', Y.label = 'PLS-DA comp 2')
+
+```
+## Save 
+```{r}
+#pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_trans.pdf", height = 5, width = 8)
+#plotIndiv_trans
+#dev.off()
+
+#pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_prot.pdf", height = 5, width = 8)
+#plotIndiv_prot
+#dev.off()
+
+#pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_met_GC.pdf", height = 5, width = 8)
+#plotIndiv_met
+#dev.off()
+
+#pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_trans2.pdf", height = 5, width = 8)
+#plotIndiv_trans.2
+#dev.off()
+
+#pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_prot2.pdf", height = 5, width = 8)
+#plotIndiv_prot.2
+#dev.off()
+
+#pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_plsda_met_GC2.pdf", height = 5, width = 8)
+#plotIndiv_met.2
+#dev.off()
+```
+
