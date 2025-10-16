@@ -466,7 +466,7 @@ all_node_trans_GSEA_KEGG <- rbind(emap_to_network_df(emap_Trans.5448.GSEA.KEGG.s
 head(all_edge_trans_GSEA_KEGG, 5)
 head(all_node_trans_GSEA_KEGG, 5)
 ```
-### **[2.3. Network Visualization](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/6.1_Network_Analysis_Strep_220425.md)** 
+### **[2.3. Network Visualisation](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/6.1_Network_Analysis_Strep_220425.md)** 
 Now we can visualise the network using node and edge data from previous step. 
 
 **Key steps:**
