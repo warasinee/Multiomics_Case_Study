@@ -217,17 +217,17 @@ In this step, you need to connect R to Cytoscape using [RCy3 package](https://cy
 ```r
 # Import .gml file (output from MixOmics (DIABLO))
 library(igraph)
-my.igraph.network <- igraph::read_graph("myNetwork_conserved.gml",format=c("gml"))
+my.igraph.network <- igraph::read_graph("myNetwork_conserved_05.gml",format=c("gml"))
 
 # From igraph to Cytoscape (Now you will see the network in Cytoscape)
 library(RCy3)
 createNetworkFromIgraph(my.igraph.network,"myIgraph.Strep")
 ```
 
-![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig2_cytoscape_1.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig3_cytoscape_1.png)
 Fig. 3 Initial Cytoscape network visualisation
 
-![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig3_cytoscape_2.png)
+![](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Image/Fig4_cytoscape_2.png)
 Fig. 4 Adjusted Cytoscape network visualisation with optimised features (e.g., layout, node, edge, label)
 
 ## PART 2: Network and Enrichment Analyses
@@ -528,4 +528,13 @@ plot_tg_trans_GSEA_KEGG_3 <- tg_trans_GSEA_KEGG %>%
 # 3.2 View the plot 
 plot_tg_trans_GSEA_KEGG_3 # with fig.height=8, fig.width=20 
 ```
+
+#### [Shiny App for network visualisation](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app/ReadMe.md)
+
+<p align = "center">
+<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app/Output/Example1.png" width=90% height=90%>
+
+
+
+
 
