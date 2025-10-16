@@ -21,10 +21,10 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
                   sidebarPanel(
                     fileInput("nodeFile", "Upload Node Table (.tsv)", accept = ".tsv"),
                     fileInput("edgeFile", "Upload Edge Table (.tsv)", accept = ".tsv"),
-                    numericInput("numStrains", "Number of strains to show:", 5, min=1, max=9, step=1),
+                    numericInput("numStrains", "Number of strains/conditions to show:", 5, min=1, max=9, step=1),
                     
                     # Filter type: exact or less than/equal
-                    radioButtons("filterType", "Filter Type (#strains):", 
+                    radioButtons("filterType", "Filter Type (#strains/#conditions):", 
                                  choices = c("Exact" = "exact", "Less Than or Equal" = "lte"),
                                  selected = "lte"),
                     
