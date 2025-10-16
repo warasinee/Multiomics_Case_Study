@@ -1,6 +1,8 @@
-# Format of input data for each step 
-## 1. Multi-omics Integration by MixOmics 
-### 1.1. Nomalised data :shipit:
+# Overview of this section
+
+## Part 1: Input data 
+### 1. Multi-omics Integration by mixOmics
+#### 1.1. Nomalised data :shipit:
 
 ```
 head(Strep_trans_data)
@@ -37,8 +39,8 @@ head(Strep_met_GC_data)
 | ...         |  ...                        |  ...               |  ...                 | ...          | 
 
 
-## 2. Network Analysis for Pathway Enrichment Outputs
-### 2.1. Results from DIABLO :shipit:
+### 2. Network Analysis for Pathway Enrichment Outputs
+#### 2.1. Results from DIABLO :shipit:
 
 ```
 loadings_data <- final.plsda.diablo$loadings 
@@ -57,7 +59,7 @@ head(loadings_data_trans)
 | ...           |  ...          |
 
 
-### 2.2. Results from Differentially Expression (DE) Analysis :shipit:
+#### 2.2. Results from Differentially Expression (DE) Analysis :shipit:
 
 ```
 head(all_DE.df.strep)
@@ -69,4 +71,20 @@ head(all_DE.df.strep)
 | 5448   |  EW021_RS00015  |   g008944       |   -0.7921787 | 2.949191e-01 | EW021_RS00015| DUF951 family protein                          |
 | 5448   |  EW021_RS00020	 |   g000450       |   -1.6880047 | 5.128776e-06 | ychF         | redox-regulated ATPase YchF                    |
 | ...    |  ...            |  ...            |  ...         | ...          | ...          | ...                                            |
+
+
+## Part 2: Exploratory Analysis
+- [PCA]() 
+- [PLS] 
+
+
+
+
+## Part 3: Discriminatory Analysis
+
+
+## Part 4: Pathway Enrichment Analysis (PEA)
+
+
+## Part 5: Network Analysis
 
