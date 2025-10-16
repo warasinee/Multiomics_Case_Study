@@ -74,17 +74,28 @@ head(all_DE.df.strep)
 
 
 ## Part 2: Exploratory Analysis
-- [PCA]() 
-- [PLS] 
-
-
+- [PCA](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/1.1_PCA_Strep_220425.md) 
+- [PLS](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/1.2_PLS_Strep_160925.md) 
 
 
 ## Part 3: Discriminatory Analysis
-
+- [PLS-DA](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/1.2_PLS_Strep_160925.md)
+- DIABLO/multiblock (S)PLS-DA
+    - [Design matrix = 0.1](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/2.1_DIABLO_Strep_220425.md)
+    - [Design matrix = 0.5](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/2.2_DIABLO_Strep_160925.md) 
 
 ## Part 4: Pathway Enrichment Analysis (PEA)
+- [Input from DE analysis](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/4_ORA_GSEA_Strep_220425.md)
+- [Input from multiblock PLS-DA]()
 
-
-## Part 5: Network Analysis
-
+## Part 5: Network Analysis 
+- Node and edge extraction
+    - [Input from multiple strains](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/5.1_Node_Edge_data_Strep_220425.md)
+    - [Input from multiple omics](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/5.2_Node_Edge_data_Strep_160925.md)
+- Network visualisation
+    - [Input from multiple strains](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/6.1_Network_Analysis_Strep_220425.md)
+    - [Input from multiple omics](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/6.2_Network_Analysis_Strep_180925.md)
+    - Input from multiblock PLS-DA
+        - [Design matrix = 0.1](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/7.1_DIABLO_Network_Strep_100625.md)
+        - [Design matrix = 0.5](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/7.2_DIABLO_Network_Strep_141025.md)
+  
