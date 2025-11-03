@@ -11,26 +11,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load R packages
 ```{r}
-library(DOSE)
-library(clusterProfiler)
-library(RCy3)
-library(igraph)
-library(tidyverse)
+# Load packages for enrichment analysis and network preparation
+library(DOSE)               # Disease Ontology Semantic and Enrichment analysis
+library(clusterProfiler)    # Statistical analysis of functional enrichment
+library(RCy3)               # R interface to Cytoscape (optional for this step)
+library(igraph)             # Network analysis and manipulation
+library(tidyverse)          # Data manipulation (dplyr, tidyr, ggplot2)
 ```
 
 ## Import ORA and GSEA results for all strains and all omics
 ```{r}
+# Load pre-computed enrichment results from ORA/GSEA analysis (from script 4)
+# This RDS file contains nested lists organized by omics type and analysis method
 ORA_GSEA_list <- readRDS("/Users/wmujchariyak/Desktop/ORA_GSEA_list_Strep.rds") 
 
-# Import ORA results for all strains and all omics
-Trans.list.ORA <- ORA_GSEA_list[["Transcriptomics RG"]]$ORA 
-Prot.list.ORA <- ORA_GSEA_list[["Proteomics MS1 DDA"]]$ORA 
-Met.GC.list.ORA <- ORA_GSEA_list[["Metabolomics GC-MS"]]$ORA  
+# Extract ORA results for each omics layer
+# Each list contains results for multiple strains
+Trans.list.ORA <- ORA_GSEA_list[["Transcriptomics RG"]]$ORA       # Transcriptomics ORA
+Prot.list.ORA <- ORA_GSEA_list[["Proteomics MS1 DDA"]]$ORA        # Proteomics ORA
+Met.GC.list.ORA <- ORA_GSEA_list[["Metabolomics GC-MS"]]$ORA      # Metabolomics ORA
 
-# Import GSEA results for all strains and all omics
-Trans.list.GSEA <- ORA_GSEA_list[["Transcriptomics RG"]]$GSEA 
-Prot.list.GSEA <- ORA_GSEA_list[["Proteomics MS1 DDA"]]$GSEA
-Met.GC.list.GSEA <- ORA_GSEA_list[["Metabolomics GC-MS"]]$GSEA
+# Extract GSEA results for each omics layer
+Trans.list.GSEA <- ORA_GSEA_list[["Transcriptomics RG"]]$GSEA     # Transcriptomics GSEA
+Prot.list.GSEA <- ORA_GSEA_list[["Proteomics MS1 DDA"]]$GSEA      # Proteomics GSEA
+Met.GC.list.GSEA <- ORA_GSEA_list[["Metabolomics GC-MS"]]$GSEA    # Metabolomics GSEA
 ```
 
 ## Collect node and edge data 
@@ -85,64 +89,118 @@ emap_Trans.PS006.GSEA.KEGG.sig <- enrichplot::emapplot(Trans.PS006.GSEA.KEGG.sig
 emap_Trans.SP444.GSEA.KEGG.sig <- enrichplot::emapplot(Trans.SP444.GSEA.KEGG.sig_2)
 
 # 2.3 Function to convert enrichment map to dataframe
+# This custom function extracts node and edge information from enrichplot's emapplot object
+# The emapplot object contains a hidden igraph network that we need to access
 emap_to_network_df <- function(emap, what = "edges"){
+  
   if (what == "vertices"){
+    # Extract NODE (vertex) information
+    # Nodes represent enriched pathways
     df <- emap$data %>% 
-      attributes %>% # provide data attributes in list
-      .$graph %>% # access an attribute named graph (which is in igraph format containing vertices (node) and edges) 
-      igraph::as_data_frame(what = "vertices") %>% # convert igraph nodes (vertices) to dataframe
-      rename(gene_set_size = "size") %>%
-      rename(p.adjust = "color") %>%
-      select(name, gene_set_size, p.adjust)
+      attributes %>%                        # Access object attributes (metadata)
+      .$graph %>%                           # Extract the igraph graph object
+      igraph::as_data_frame(what = "vertices") %>%  # Convert nodes to data frame
+      rename(gene_set_size = "size") %>%    # Rename: pathway size
+      rename(p.adjust = "color") %>%        # Rename: adjusted p-value
+      select(name, gene_set_size, p.adjust) # Keep relevant columns
     return(df)
+    
   } else if (what == "edges"){
+    # Extract EDGE information
+    # Edges represent similarity between pathways (based on shared genes)
     df <- emap$data %>%
-      attributes %>%
-      .$graph %>%
-      igraph::as_data_frame(what = "edges") %>%
-      rename(similarity = "weight") %>%
-      select(from, to, similarity)
+      attributes %>%                        # Access object attributes
+      .$graph %>%                           # Extract the igraph graph object
+      igraph::as_data_frame(what = "edges") %>%  # Convert edges to data frame
+      rename(similarity = "weight") %>%     # Rename: Jaccard similarity coefficient
+      select(from, to, similarity)          # Keep relevant columns
     return(df)
+    
   } else {
-    return(print("error what should be set to edges or nodes"))
+    # Error handling for invalid input
+    return(print("error: 'what' parameter should be set to 'edges' or 'vertices'"))
   }
 }
 
-# 2.4 Concatenate edges df and node df of the 2 strain
-all_edge_trans_GSEA_KEGG <- rbind(emap_to_network_df(emap_Trans.5448.GSEA.KEGG.sig),
-                                 emap_to_network_df(emap_Trans.HKU419.GSEA.KEGG.sig),
-                                 emap_to_network_df(emap_Trans.PS003.GSEA.KEGG.sig),
-                                 emap_to_network_df(emap_Trans.PS006.GSEA.KEGG.sig),
-                                 emap_to_network_df(emap_Trans.SP444.GSEA.KEGG.sig)) %>%
-  dplyr::rowwise() %>% # allows you to compute on a data frame a row-at-a-time
+# 2.4 Aggregate edge data across all strains
+# Combine enrichment networks from multiple strains to identify:
+# 1. Conserved pathway relationships (present in multiple strains)
+# 2. Average similarity scores across strains
+
+all_edge_trans_GSEA_KEGG <- rbind(
+  emap_to_network_df(emap_Trans.5448.GSEA.KEGG.sig),
+  emap_to_network_df(emap_Trans.HKU419.GSEA.KEGG.sig),
+  emap_to_network_df(emap_Trans.PS003.GSEA.KEGG.sig),
+  emap_to_network_df(emap_Trans.PS006.GSEA.KEGG.sig),
+  emap_to_network_df(emap_Trans.SP444.GSEA.KEGG.sig)
+) %>%
+  # Process row-by-row to create unique edge identifiers
+  dplyr::rowwise() %>%
+  # Create standardized edge ID (alphabetically sorted to avoid duplicates)
+  # Example: "pathA-pathB" and "pathB-pathA" become the same edge
   dplyr::mutate(edge = paste0(sort(c(from, to)), collapse = "#")) %>%
+  
+  # Group by unique edges
   dplyr::group_by(edge) %>%
-  dplyr::summarize(nb_strain_with_edge = n(),
-                   #similarity = paste0(similarity, collapse = ",")) %>%
-                   similarity = mean(similarity)) %>%
+  dplyr::summarize(
+    nb_strain_with_edge = n(),           # Count: how many strains share this edge
+    similarity = mean(similarity)        # Average similarity across strains
+  ) %>%
   ungroup() %>%
+  
+  # Split edge ID back into 'from' and 'to' columns
   tidyr::separate(edge, sep = "#", into = c("to", "from")) %>%
   dplyr::select(from, to, nb_strain_with_edge, similarity)
 
-all_node_trans_GSEA_KEGG <- rbind(emap_to_network_df(emap_Trans.5448.GSEA.KEGG.sig, what = "vertices"),
-                                 emap_to_network_df(emap_Trans.HKU419.GSEA.KEGG.sig, what = "vertices"),
-                                 emap_to_network_df(emap_Trans.PS003.GSEA.KEGG.sig, what = "vertices"),
-                                 emap_to_network_df(emap_Trans.PS006.GSEA.KEGG.sig, what = "vertices"),
-                                 emap_to_network_df(emap_Trans.SP444.GSEA.KEGG.sig, what = "vertices")) %>%
+# 2.5 Aggregate node data across all strains
+# Combine pathway data to identify conserved enrichments
+
+all_node_trans_GSEA_KEGG <- rbind(
+  emap_to_network_df(emap_Trans.5448.GSEA.KEGG.sig, what = "vertices"),
+  emap_to_network_df(emap_Trans.HKU419.GSEA.KEGG.sig, what = "vertices"),
+  emap_to_network_df(emap_Trans.PS003.GSEA.KEGG.sig, what = "vertices"),
+  emap_to_network_df(emap_Trans.PS006.GSEA.KEGG.sig, what = "vertices"),
+  emap_to_network_df(emap_Trans.SP444.GSEA.KEGG.sig, what = "vertices")
+) %>%
+  # Group by pathway name
   dplyr::group_by(name) %>%
-  dplyr::summarize(nb_strain_with_node = n(),
-                   #gene_set_size = paste0(gene_set_size, collapse = ","),
-                   gene_set_size = mean(gene_set_size),
-                   p.adjust =paste0(p.adjust, collapse = ",")) %>%
+  dplyr::summarize(
+    nb_strain_with_node = n(),                      # Count: in how many strains is this pathway enriched
+    gene_set_size = mean(gene_set_size),            # Average pathway size
+    p.adjust = paste0(p.adjust, collapse = ",")     # Concatenate p-values from all strains
+  ) %>%
   ungroup()
 
-# Check output
+# Preview aggregated data
+# Edge data: pathway-pathway connections
 head(all_edge_trans_GSEA_KEGG, 5)
+
+# Node data: pathway enrichment information
 head(all_node_trans_GSEA_KEGG, 5)
 
-# 3. Save data
-write.table(all_edge_trans_GSEA_KEGG, "/Users/wmujchariyak/Desktop/Strep_all_edge_trans_GSEA_KEGG.tsv", sep = "\t", row.names = F)
-write.table(all_node_trans_GSEA_KEGG, "/Users/wmujchariyak/Desktop/Strep_all_node_trans_GSEA_KEGG.tsv", sep = "\t", row.names = F)
+# Interpretation:
+# - Higher nb_strain_with_node/edge: more conserved across strains
+# - Higher similarity: pathways share more genes in common
+# - These data will be used for network visualization in downstream analyses
+
+# 3. Save data for downstream network visualization
+# Export node and edge tables in tab-separated format
+# These files can be imported into:
+# - The Shiny network app (Network_app.R)
+# - Cytoscape for advanced visualization
+# - Custom R scripts for further analysis
+
+# Export edge table (pathway-pathway connections)
+write.table(all_edge_trans_GSEA_KEGG, 
+            "/Users/wmujchariyak/Desktop/Strep_all_edge_trans_GSEA_KEGG.tsv", 
+            sep = "\t",          # Tab-separated
+            row.names = FALSE)   # Don't include row numbers
+
+# Export node table (pathway information)
+write.table(all_node_trans_GSEA_KEGG, 
+            "/Users/wmujchariyak/Desktop/Strep_all_node_trans_GSEA_KEGG.tsv", 
+            sep = "\t", 
+            row.names = FALSE)
 
 ```
 
