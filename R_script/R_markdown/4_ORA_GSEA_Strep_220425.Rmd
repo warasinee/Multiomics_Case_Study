@@ -11,47 +11,74 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load R packages
 ```{r}
+# Load required packages for pathway enrichment analysis
+# clusterProfiler: performs Over-Representation Analysis (ORA) and Gene Set Enrichment Analysis (GSEA)
+# Reference: https://yulab-smu.top/biomedical-knowledge-mining-book/
 library(clusterProfiler)
+
+# tidyverse: data manipulation tools
 library(tidyverse)
 
+# Resolve function name conflicts between packages
 library(conflicted)
-conflict_prefer("select", "dplyr")
-conflict_prefer("filter", "dplyr")
+conflict_prefer("select", "dplyr")  # Use dplyr's select() instead of MASS::select()
+conflict_prefer("filter", "dplyr")  # Use dplyr's filter() instead of stats::filter()
 
-set.seed(123) # for reproducibility
+# Set seed for reproducibility in permutation tests (GSEA)
+set.seed(123)
 ```
 
 ## Import all omics
 ```{r}
-# Import all entities fold change results (all omics combined)
+# Import differential expression results and functional annotations
+# These files contain pre-processed data from upstream analyses
+
+# Load differential expression/abundance results across all omics
+# Contains log fold changes (logFC) and FDR values for each entity (gene/protein/metabolite)
 all_DE.df <- readRDS("/Users/wmujchariyak/Desktop/All_entity_fold_change_long_format.rds")
 
-# Import all functional annotations 
+# Load functional annotation database
+# Maps genes/proteins to biological pathways (GO terms, KEGG pathways, etc.)
 all.annot <- readRDS("/Users/wmujchariyak/Desktop/All_funct_annot_clean_noduplicate.rda")
 ```
 
 ## Set parameters
 ```{r}
-# For ORA only 
-my_FDR <- 0.05 # FDR threshold (filter signif. DE genes)
-my_logFC <- 1  # logFC threshold (filter signif. DE genes)
+# Define thresholds and filters for enrichment analysis
 
-# For ORA and GSEA
-annot_origin <- unique(all.annot$fterm_origin) %>% as.character() # Use all annotations
+# ORA (Over-Representation Analysis) specific parameters:
+my_FDR <- 0.05  # False Discovery Rate threshold (5% FDR cutoff)
+                # Only genes/proteins with FDR < 0.05 are considered significant
+my_logFC <- 1   # Log2 fold change threshold (2-fold change)
+                # Only entities with |logFC| > 1 are included
+
+# Parameters for both ORA and GSEA:
+# Use all available annotation sources (GO, KEGG, etc.)
+annot_origin <- unique(all.annot$fterm_origin) %>% as.character()
+
+# Filter for core genes (present across all strains)
+# "yes" = include only core genome genes
 is_core_accessory <- "yes"
 ```
 
 ## Example for only Transcriptomics 
 ### ORA & GSEA 
 ```{r}
-## Prepare Transcriptome data
+# Perform pathway enrichment analysis on transcriptomics data
+# This example demonstrates both ORA and GSEA approaches
+# Reference: https://yulab-smu.top/biomedical-knowledge-mining-book/enrichment-overview.html
+
+## STEP 1: Prepare Transcriptome data
 my_species <- "Streptococcus pyogenes"
 my_omics <- "Transcriptomics RG"
 
+# Filter differential expression results for specified species and omics type
 all_DE.res <- all_DE.df %>%
   filter(species == my_species) %>%
   filter(experiment == my_omics)
 
+# Select appropriate annotations based on omics type
+# Metabolites use different annotation schemes than genes/proteins
 if (grepl("Metabo", my_omics)){
   my.annot <- all.annot %>%
     filter(entity_type == "metabolite")
@@ -60,30 +87,40 @@ if (grepl("Metabo", my_omics)){
     filter(entity_type != "metabolite")
 }
 
-Trans.list.ORA <- list()
-Trans.list.ORA.summary <- list()
+# Initialize storage lists for results from each strain
+Trans.list.ORA <- list()           # Store ORA enrichment results
+Trans.list.ORA.summary <- list()   # Store ORA summaries with logFC info
 
-Trans.list.GSEA <- list()
-Trans.list.GSEA.summary <- list()
+Trans.list.GSEA <- list()          # Store GSEA enrichment results
+Trans.list.GSEA.summary <- list()  # Store GSEA summaries
 
+# Loop through each bacterial strain for enrichment analysis
 for (my_strain in unique(all_DE.res$strain)){
-  # ORA analysis
-  # prepare input data for ORA
-  ORA.df <- all_DE.res %>%
-    filter(is_species_core %in% is_core_accessory ) %>%
-    filter(strain == my_strain) %>%
-    filter(FDR < my_FDR) %>%
-    filter(abs(logFC) > my_logFC) 
   
+  ## PART A: Over-Representation Analysis (ORA)
+  # ORA tests if significantly DE genes are over-represented in specific pathways
+  # Approach: Uses a 2x2 contingency table (in pathway & DE vs not in pathway & not DE)
+  # Reference: https://yulab-smu.top/biomedical-knowledge-mining-book/ora.html
+  
+  # Filter for significantly differentially expressed genes
+  ORA.df <- all_DE.res %>%
+    filter(is_species_core %in% is_core_accessory) %>%  # Core genes only
+    filter(strain == my_strain) %>%                      # Current strain
+    filter(FDR < my_FDR) %>%                             # Significant by FDR
+    filter(abs(logFC) > my_logFC)                        # Significant fold change
+  
+  # Extract gene list for ORA (significantly DE genes only)
   glist.ORA <- ORA.df$entity_id
   
-  # Get strain specific background gene list 
+  # Define background gene set (all genes tested, not just significant ones)
+  # Crucial for accurate statistical testing
   bglist.ORA <- all_DE.res %>%
     filter(is_species_core %in% is_core_accessory) %>%
     filter(strain == my_strain) %>%
     distinct(entity_id, .keep_all = T) %>%
     .$entity_id
   
+  # Prepare term-to-gene mapping (which genes belong to which pathways)
   term_to_gene.df <- my.annot %>%
     filter(fterm_origin %in% annot_origin) %>%
     filter(entity_id %in% bglist.ORA) %>%
@@ -91,6 +128,7 @@ for (my_strain in unique(all_DE.res$strain)){
     distinct(fterm_id, entity_id) %>%
     ungroup()
   
+  # Prepare term-to-name mapping (pathway ID to pathway description)
   term_to_name.df <- my.annot %>%
     filter(fterm_origin %in% annot_origin) %>%
     filter(entity_id %in% bglist.ORA) %>%
@@ -98,7 +136,8 @@ for (my_strain in unique(all_DE.res$strain)){
     distinct(fterm_id, fterm_name) %>%
     ungroup()
   
-  # Calculate mean/median logFC of term/path for plot
+  # Calculate mean/median logFC for each pathway
+  # Helps interpret pathway direction (up-regulated vs down-regulated)
   ORA_logFC_summary <- ORA.df %>% 
     merge(., term_to_gene.df , by = "entity_id", all.x = T) %>%
     group_by(strain, fterm_id) %>%
@@ -106,60 +145,98 @@ for (my_strain in unique(all_DE.res$strain)){
     ungroup() %>%
     dplyr::select(-strain)
   
-  ORA <- enricher(gene = glist.ORA,
-                  TERM2GENE = term_to_gene.df, 
-                  TERM2NAME = term_to_name.df,
-                  universe = bglist.ORA,
-                  qvalueCutoff = 1,
-                  minGSSize = 5, 
-                  maxGSSize = length(bglist.ORA)/2,
-                  pvalueCutoff = 1,
-                  pAdjustMethod = "fdr") 
+  # Run Over-Representation Analysis
+  # Uses hypergeometric test to identify enriched pathways
+  ORA <- enricher(
+    gene = glist.ORA,                       # Significantly DE genes
+    TERM2GENE = term_to_gene.df,            # Pathway-to-gene mapping
+    TERM2NAME = term_to_name.df,            # Pathway ID to name mapping
+    universe = bglist.ORA,                  # Background gene universe
+    qvalueCutoff = 1,                       # No q-value filter (keep all results)
+    minGSSize = 5,                          # Minimum pathway size (≥ 5 genes)
+    maxGSSize = length(bglist.ORA)/2,       # Maximum pathway size (≤ 50% of all genes)
+    pvalueCutoff = 1,                       # No p-value filter (keep all results)
+    pAdjustMethod = "fdr"                   # Multiple testing correction method
+  )
   
+  # Store ORA results
   Trans.list.ORA[[my_strain]] <- ORA
-  Trans.list.ORA.summary[[my_strain]]  <- ORA %>% 
+  
+  # Create ORA summary with fold change information
+  Trans.list.ORA.summary[[my_strain]] <- ORA %>% 
     as.data.frame() %>% 
     mutate(strain = my_strain) %>%
     mutate(experiment = my_omics) %>%
     merge(., ORA_logFC_summary, by.x = "ID", by.y = "fterm_id") 
   
-###############
-  # GSEA analysis
+  ###############
+  ## PART B: Gene Set Enrichment Analysis (GSEA)
+  # GSEA examines if pathway genes are enriched at the top/bottom of ranked gene list
+  # Advantage over ORA: Uses all genes (not just significant ones), considers magnitude
+  # Reference: https://yulab-smu.top/biomedical-knowledge-mining-book/gsea.html
+  
+  # Prepare gene list for GSEA (all genes, not just significant)
   GSEA.df <- all_DE.res %>%
-    filter(is_species_core %in% is_core_accessory ) %>%
+    filter(is_species_core %in% is_core_accessory) %>%
     filter(strain == my_strain) %>%
     filter(experiment == my_omics) %>%
     distinct(entity_id, .keep_all = T) 
   
+  # Create ranked gene list based on logFC
+  # Higher logFC = more up-regulated in SERUM vs RPMI
   glist.GSEA <- GSEA.df$logFC 
   names(glist.GSEA) <- GSEA.df$entity_id
+  
+  # Sort in descending order (most up-regulated first)
+  # GSEA uses this ranking to determine if pathway genes cluster at extremes
   glist.GSEA <- sort(glist.GSEA, decreasing = T)
   
-  GSEA <- GSEA(geneList = glist.GSEA, 
-               TERM2GENE = term_to_gene.df,
-               TERM2NAME = term_to_name.df,
-               minGSSize = 5,
-               maxGSSize = length(bglist.ORA)/2,
-               pvalueCutoff = 1,
-               pAdjustMethod = "fdr",
-               nPermSimple = 100000,  # Increase the number of permutations
-               eps = 0  # Allow more precise p-value estimation
-               )
+  # Run Gene Set Enrichment Analysis
+  # Uses Kolmogorov-Smirnov-like statistic to detect pathway enrichment
+  GSEA <- GSEA(
+    geneList = glist.GSEA,                  # Ranked gene list (all genes)
+    TERM2GENE = term_to_gene.df,            # Pathway-to-gene mapping
+    TERM2NAME = term_to_name.df,            # Pathway ID to name mapping
+    minGSSize = 5,                          # Minimum pathway size
+    maxGSSize = length(bglist.ORA)/2,       # Maximum pathway size
+    maxGSSize = length(bglist.ORA)/2,       # Maximum pathway size
+    pvalueCutoff = 1,                       # No p-value filter (keep all)
+    pAdjustMethod = "fdr",                  # FDR correction
+    nPermSimple = 100000,                   # Number of permutations (high for precision)
+    eps = 0                                 # Allow p-values < 1/nPermSimple
+  )
   
+  # Store GSEA results
   Trans.list.GSEA[[my_strain]] <- GSEA
-  Trans.list.GSEA.summary[[my_strain]]  <- GSEA %>% 
+  
+  # Create GSEA summary with pathway names
+  Trans.list.GSEA.summary[[my_strain]] <- GSEA %>% 
     as.data.frame() %>% 
     mutate(strain = my_strain) %>%
     mutate(experiment = my_omics) %>%
     merge(., term_to_name.df, by.x = "ID", by.y = "fterm_id", all.x = T) 
 }
 
+# Key differences between ORA and GSEA:
+# ORA: Uses only significant genes, tests over-representation
+# GSEA: Uses all genes ranked by expression, detects coordinated changes
+# Both methods are complementary and provide different insights
 ```
 
 ### Check ORA and GSEA Results
 ```{r}
+# Examine enrichment results for a representative strain
+# View top 5 enriched pathways from ORA
 head(Trans.list.ORA.summary[["5448"]], 5)
+
+# View top 5 enriched pathways from GSEA
 head(Trans.list.GSEA.summary[["5448"]], 5)
+
+# Interpretation tips:
+# - p.adjust < 0.05: significantly enriched pathway
+# - GeneRatio: proportion of DE genes in the pathway
+# - BgRatio: proportion of background genes in the pathway
+# - NES (GSEA): normalized enrichment score (positive = up, negative = down)
 ```
 
 
