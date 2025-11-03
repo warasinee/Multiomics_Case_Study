@@ -32,6 +32,10 @@ set.seed(123)
 # Import multi-omics datasets for DIABLO integration
 # DIABLO (Data Integration Analysis for Biomarker discovery using Latent cOmponents)
 # requires matched samples across all omics layers
+#
+# ⚠️  DATA FORMAT REQUIREMENTS:
+# See INPUT_DATA_FORMAT.md for detailed specifications
+# Critical: All datasets must have identical sample order!
 
 # Transcriptomics: RNA expression data
 Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% 

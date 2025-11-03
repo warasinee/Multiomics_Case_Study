@@ -48,6 +48,20 @@ BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
 - Cytoscape (≥ 3.9 recommended) for interactive network visualisation
 ---
 
+## Input Data Format
+📋 **IMPORTANT**: Before running the analysis, prepare your input files according to the specifications in **[INPUT_DATA_FORMAT.md](INPUT_DATA_FORMAT.md)**
+
+This document provides detailed information about:
+- Multi-omics data file formats (CSV structure and requirements)
+- Differential expression results format for enrichment analysis
+- Functional annotation file structure
+- Network files for Shiny app visualization
+- Quality control checks and formatting tips
+
+Example files are provided in the `Data/` directory.
+
+---
+
 ## Data preprocessing
 1. Transcriptome (RNA-seq data)
     - A web application for RNA-seq exploration, analysis and visualisation - [Degust](https://degust.erc.monash.edu/)

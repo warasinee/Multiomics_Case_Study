@@ -29,6 +29,16 @@ set.seed(123)
 ```{r}
 # Import multi-omics data for Streptococcus pyogenes
 # Each dataset contains measurements across different molecular layers:
+# 
+# ⚠️  DATA FORMAT REQUIREMENTS:
+# See INPUT_DATA_FORMAT.md for detailed specifications of input file structure
+# 
+# Expected format:
+# - CSV file with feature IDs in first column (will become row names)
+# - Remaining columns are samples with numeric measurements
+# - Same samples (in same order) across all omics files
+# - Already normalized and log-transformed data
+# - No missing values (use 0 or appropriate imputation)
 
 # 1. Transcriptomics data: gene expression levels (RNA-seq)
 # Rows = samples, Columns = genes/transcripts
