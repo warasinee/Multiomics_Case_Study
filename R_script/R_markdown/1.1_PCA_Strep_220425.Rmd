@@ -11,103 +11,209 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load R packages
 ```{r}
+# Load required packages for multi-omics analysis
+# mixOmics: provides tools for multivariate analysis and integration of omics datasets
+# Reference: http://mixomics.org/
 library(mixOmics)
+
+# tidyverse: collection of R packages for data manipulation and visualization
 library(tidyverse)
-set.seed(123) # for reproducibility
+
+# Set seed for reproducibility - ensures that random processes (like cross-validation)
+# produce the same results each time the code is run
+set.seed(123)
 ```
 
 
 ## Import all omics
 ```{r}
-Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
-Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
-Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+# Import multi-omics data for Streptococcus pyogenes
+# Each dataset contains measurements across different molecular layers:
+
+# 1. Transcriptomics data: gene expression levels (RNA-seq)
+# Rows = samples, Columns = genes/transcripts
+Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% 
+  column_to_rownames(var = "X")  # Move first column (sample IDs) to row names
+
+# 2. Proteomics data: protein abundance levels (mass spectrometry)
+# Rows = samples, Columns = proteins
+Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% 
+  column_to_rownames(var = "X")
+
+# 3. Metabolomics data: metabolite concentrations (GC-MS)
+# Rows = samples, Columns = metabolites
+Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% 
+  column_to_rownames(var = "X")
 ```
 
 
 ## Data for MixOmics 
 ```{r}
+# Organize data into a named list structure required by mixOmics
+# This format allows for easy iteration over multiple omics datasets
 data <- list(Transcript = Strep_trans_data, 
              Protein = Strep_prot_data, 
              Metabolite_GC = Strep_met_GC_data)
-lapply(data, dim) # check their dimensions (24 rows)
 
+# Check dimensions of each dataset (should have same number of rows = samples)
+# Expected output: number of samples (rows) x number of features (columns) for each omics layer
+lapply(data, dim)
 
-Y <- factor(rep(c("RPMI", "SERUM"), 30)) # set the response variable as the Y df
+# Create response variable (Y) representing experimental conditions
+# RPMI: standard bacterial culture medium (control condition)
+# SERUM: medium supplemented with serum (experimental condition)
+# Each condition has 30 biological replicates (60 total samples)
+Y <- factor(rep(c("RPMI", "SERUM"), 30))
+
+# Verify the distribution of samples across conditions
 summary(Y)
 ```
 
 ## PCA 
 ```{r}
-data_name <- c("Transcript", "Protein", "Metabolite_GC")
-list.final.pca <- list()
-plot.tune.pca <- list()
-pca.cum.var <- list()
+# Principal Component Analysis (PCA) - Unsupervised dimensionality reduction
+# PCA is used to explore the overall structure of each omics dataset independently
+# Reference: http://mixomics.org/methods/pca/
+# Tutorial: http://mixomics.org/case-studies/pca-liver-toxicity/
 
+# Initialize storage lists for results from each omics layer
+data_name <- c("Transcript", "Protein", "Metabolite_GC")
+list.final.pca <- list()      # Store final PCA models
+plot.tune.pca <- list()        # Store tuning results
+pca.cum.var <- list()          # Store cumulative variance explained
+
+# Perform PCA for each omics dataset
 for (i in seq_along(data_name)){
-  set.seed(123) # for reproducibility
+  set.seed(123)  # Ensure reproducibility within the loop
   data_pca <- data[[i]]
-  # Choosing number of components
+  
+  # Step 1: Tune the number of principal components
+  # tune.pca() evaluates how much variance is explained by each component
+  # ncomp = 10: test up to 10 principal components
+  # scale = TRUE: standardize variables (mean=0, variance=1) to ensure comparability
+  # This is crucial when features are measured in different units
   tune.pca <- tune.pca(data_pca, ncomp = 10, scale = TRUE)
   plot.tune.pca[[i]] <- tune.pca
-  # Outputs cumulative proportion of variance
+  
+  # Extract cumulative proportion of variance explained
+  # Helps determine optimal number of components to retain
   pca.cum.var[[i]] <- tune.pca$cum.var       
-  # Final pca 
+  
+  # Step 2: Perform final PCA with chosen number of components
+  # ncomp = 3: retain first 3 principal components (based on tuning results)
+  # These 3 components typically capture ~50% of the total variance
   final.pca <- pca(data_pca, ncomp = 3, scale = TRUE)
   list.final.pca[[i]] <- final.pca
 }
 
-# Note: Results from "tune.pca" suggest that using 3 components can cover almost 50% of variation in the datasets
+# Note: Results from "tune.pca" suggest that using 3 components can cover almost 50% 
+# of variation in the datasets, providing a good balance between data reduction and 
+# information retention
 ```
 
 ## Data visualization - Preliminary
 ```{r}
-# Trans
+# Explore variable contributions (loadings) for each omics layer
+# Loadings indicate which features contribute most to each principal component
+# Reference: http://mixomics.org/graphics/sample-plots/plotloadings/
+
+# Transcriptomics loadings
+# plotLoadings shows the most important genes contributing to PC1
+# comp = 1: visualize loadings for the first principal component
+# method = 'mean': order features by their mean absolute loading value
+# contrib = 'max': keep only features with maximum contribution
 plotLoadings(list.final.pca[[1]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
+
+# Extract and rank transcript variables by their contribution to PC1
 trans.pca.var <- selectVar(list.final.pca[[1]], comp = 1)$value
 trans.pca.var$Rank <- rank(abs(trans.pca.var$value.var))
 
-# Prot
+# Proteomics loadings
+# Identify key proteins driving variation along PC1
 plotLoadings(list.final.pca[[2]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
+
+# Extract and rank protein variables
 prot.ms1.pca.var <- selectVar(list.final.pca[[2]], comp = 1)$value
 prot.ms1.pca.var$Rank <- rank(abs(prot.ms1.pca.var$value.var))
 
-# Met - LC
+# Metabolomics loadings (GC-MS)
+# Identify key metabolites contributing to separation between conditions
 plotLoadings(list.final.pca[[3]], comp = 1, method = 'mean', contrib = 'max', size.title = rel(1))
+
+# Extract and rank metabolite variables
 met.LC.pca.var <- selectVar(list.final.pca[[3]], comp = 1)$value
 met.LC.pca.var$Rank <- rank(abs(met.LC.pca.var$value.var))
 ```
 
 ## Data visualization - Final 
 ```{r}
-plotIndiv_pca_trans <- plotIndiv(list.final.pca[[1]], group = Y, ind.names = FALSE,
-                                  legend = TRUE, ellipse = T, style = "ggplot2", size.title = rel(2.5),
-                                  size.xlabel = rel(1.5), size.ylabel = rel(1.5),
-                                  title = 'Transcriptome') 
+# Create sample plots (score plots) to visualize sample clustering in PCA space
+# These plots show how samples separate based on their molecular profiles
+# Reference: http://mixomics.org/graphics/sample-plots/plotindiv/
 
-plotIndiv_pca_prot <- plotIndiv(list.final.pca[[2]], group = Y, ind.names = FALSE,
-                                 legend = TRUE, ellipse = T, style = "ggplot2", 
+# Transcriptome PCA plot
+# Visualizes samples projected onto the first two principal components
+# Each point represents one sample, colored by experimental condition
+plotIndiv_pca_trans <- plotIndiv(list.final.pca[[1]], 
+                                  group = Y,              # Color samples by condition (RPMI vs SERUM)
+                                  ind.names = FALSE,      # Don't show individual sample names (cleaner plot)
+                                  legend = TRUE,          # Display legend for groups
+                                  ellipse = TRUE,         # Draw confidence ellipses around groups
+                                  style = "ggplot2",      # Use ggplot2-style graphics
+                                  size.title = rel(2.5),  # Enlarge title
+                                  size.xlabel = rel(1.5), # Enlarge x-axis label
+                                  size.ylabel = rel(1.5), # Enlarge y-axis label
+                                  title = 'Transcriptome')
+
+# Proteome PCA plot
+# Shows protein-level separation between conditions
+plotIndiv_pca_prot <- plotIndiv(list.final.pca[[2]], 
+                                 group = Y, 
+                                 ind.names = FALSE,
+                                 legend = TRUE, 
+                                 ellipse = TRUE, 
+                                 style = "ggplot2", 
                                  size.title = rel(2.5),
-                                 size.xlabel = rel(1.5), size.ylabel = rel(1.5),
+                                 size.xlabel = rel(1.5), 
+                                 size.ylabel = rel(1.5),
                                  title = 'Proteome')
 
-plotIndiv_pca_met_GC <- plotIndiv(list.final.pca[[3]], group = Y, ind.names = FALSE,
-                                   legend = TRUE, ellipse = T, style = "ggplot2", 
+# Metabolome PCA plot (GC-MS)
+# Reveals metabolite-level differences between growth conditions
+plotIndiv_pca_met_GC <- plotIndiv(list.final.pca[[3]], 
+                                   group = Y, 
+                                   ind.names = FALSE,
+                                   legend = TRUE, 
+                                   ellipse = TRUE, 
+                                   style = "ggplot2", 
                                    size.title = rel(2.5),
-                                   size.xlabel = rel(1.5), size.ylabel = rel(1.5),
+                                   size.xlabel = rel(1.5), 
+                                   size.ylabel = rel(1.5),
                                    title = 'Metabolome (GC-MS)')
+
+# Interpretation:
+# - Distinct clusters indicate that conditions have different molecular signatures
+# - Ellipse overlap suggests similarity between conditions at that omics level
+# - Distance between samples reflects their molecular dissimilarity
 ```
 
 ## Save
 ```{r}
+# Export plots as PDF files for publication or presentation
+# Uncomment these lines to save plots to your desired location
+# Recommended dimensions: height = 5 inches, width = 8 inches
+
+# Save transcriptome PCA plot
 #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_pca_trans.pdf", height = 5, width = 8)
 #plotIndiv_pca_trans
 #dev.off()
 
+# Save proteome PCA plot
 #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_pca_prot.pdf", height = 5, width = 8)
 #plotIndiv_pca_prot
 #dev.off()
 
+# Save metabolome PCA plot
 #pdf("/Users/wmujchariyak/Desktop/Strep_plotIndiv_pca_met_GC.pdf", height = 5, width = 8)
 #plotIndiv_pca_met_GC
 #dev.off()
