@@ -2,32 +2,54 @@
 #
 # Network visualization using Cytoscape - DIABLO results 
 #
+# This script demonstrates how to:
+# 1. Connect R to Cytoscape using RCy3
+# 2. Import DIABLO network (GML file from mixOmics)
+# 3. Customize network appearance (nodes, edges, layout)
+# 4. Export publication-ready network figures
+#
+# Prerequisites:
+# - Cytoscape software must be installed and running
+# - GML file generated from DIABLO analysis
+#
+# Reference: http://mixomics.org/mixomics-study-examples/diablo-tcga-case-study/#visualize-in-cytoscape
+# RCy3 Documentation: https://cytoscape.org/RCy3/
+#
 # Written by Warasinee Mujchariyakul
 #
 ###############################
 
 # Load R packages
+# RCy3: R interface to Cytoscape for programmatic network visualization
 library(RCy3)
+
+# igraph: network analysis and file I/O for GML format
 library(igraph)
-set.seed(123) # for reproducibility
+
+# Set seed for reproducibility in layout algorithms
+set.seed(123)
 
 ###############################
 
-## Introduction to Cytoscape in R ##
-# Ref: http://127.0.0.1:13113/session/Rvig.1006a4f648dea.html
-# Overview of RCy3 : http://127.0.0.1:13113/library/RCy3/doc/Overview-of-RCy3.html
+## STEP 1: Connect R to Cytoscape ##
+# Before running this script, make sure Cytoscape is open and running!
+# Download Cytoscape: https://cytoscape.org/download.html
+# Reference: https://cytoscape.org/RCy3/articles/Overview-of-RCy3.html
 
 library(RCy3)
 
-# Open cytoscape software!!!!!
+# Test connection to Cytoscape
+# This should return "You are connected to Cytoscape!" if successful
+# If it fails, ensure Cytoscape is running and port 1234 is not blocked
+cytoscapePing() 
 
-# Getting started (Connecting R to Cytoscape)
-cytoscapePing () 
+# Check Cytoscape version information
+# Verifies API version and Cytoscape version for compatibility
+# Example output: apiVersion (v1), cytoscapeVersion (3.9.1)
+cytoscapeVersionInfo()
 
-# Check version (Here: apiVersion (V1), cytoscapeVersion (3.9.1))
-cytoscapeVersionInfo ()
-
-# More information about package RCy3
+# Access RCy3 package documentation and tutorials
+# Opens vignettes in your browser with detailed examples
 browseVignettes("RCy3")
 
 ###############################
