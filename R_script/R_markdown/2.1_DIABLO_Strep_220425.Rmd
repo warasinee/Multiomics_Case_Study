@@ -11,57 +11,132 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load R packages
 ```{r}
+# Load required packages for DIABLO analysis
+# mixOmics: provides multiblock supervised integration methods (DIABLO/block.splsda)
+# Reference: http://mixomics.org/methods/diablo/
+# Tutorial: http://mixomics.org/case-studies/diablo-tcga-case-study/
 library(mixOmics)
+
+# tidyverse: data manipulation and visualization tools
 library(tidyverse)
+
+# igraph: network analysis and export to Cytoscape
 library(igraph)
-set.seed(123) # for reproducibility
+
+# Set seed for reproducibility - critical for cross-validation and feature selection
+set.seed(123)
 ```
 
 ## Import all omics
 ```{r}
-Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
-Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
-Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% column_to_rownames(var = "X")
+# Import multi-omics datasets for DIABLO integration
+# DIABLO (Data Integration Analysis for Biomarker discovery using Latent cOmponents)
+# requires matched samples across all omics layers
+
+# Transcriptomics: RNA expression data
+Strep_trans_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_transcriptome_data.csv", header = TRUE) %>% 
+  column_to_rownames(var = "X")
+
+# Proteomics: Protein abundance data
+Strep_prot_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_proteome_data.csv", header = TRUE) %>% 
+  column_to_rownames(var = "X")
+
+# Metabolomics: Metabolite concentration data (GC-MS)
+Strep_met_GC_data <- read.csv("/Users/wmujchariyak/Desktop/Strep_metabolome_GC_data.csv", header = TRUE) %>% 
+  column_to_rownames(var = "X")
 ```
 
 ## Data for MixOmics (DIABLO)
 ```{r}
+# Prepare data in the format required for DIABLO analysis
+# All datasets must have:
+# 1. Same samples (rows) in the same order
+# 2. Named list format for multi-block integration
+
 data <- list(Transcript = Strep_trans_data, 
              Protein = Strep_prot_data, 
              Metabolite_GC = Strep_met_GC_data)
-lapply(data, dim) # check their dimensions (60 rows)
 
+# Verify dimensions: all should have 60 rows (samples) but different columns (features)
+lapply(data, dim)
 
-Y <- factor(rep(c("RPMI", "SERUM"), 30)) # set the response variable as the Y df
+# Define outcome variable (Y)
+# This is the categorical variable we want to predict/discriminate
+# RPMI = control medium, SERUM = experimental condition with serum
+Y <- factor(rep(c("RPMI", "SERUM"), 30))
+
+# Check class distribution (should be balanced: 30 RPMI, 30 SERUM)
 summary(Y)
 ```
 
 ## Initial DIABLO model 
 ```{r}
-design = matrix(0.1, ncol = length(data), nrow = length(data), 
+# Create the design matrix - specifies how omics blocks should be connected
+# The design matrix controls the level of correlation sought between datasets
+# Reference: http://mixomics.org/methods/diablo/#design-matrix
+
+# Initialize design matrix with 0.1 for all pairwise connections
+# Values range from 0 (no connection) to 1 (maximum correlation)
+# 0.1 is a moderate value that encourages some correlation between blocks
+# while still allowing each block to maintain its individuality
+design = matrix(0.1, 
+                ncol = length(data), 
+                nrow = length(data), 
                 dimnames = list(names(data), names(data)))
-diag(design) = 0 # set diagonal to 0s
+
+# Set diagonal to 0 (blocks don't correlate with themselves)
+diag(design) = 0
+
+# View the design matrix
+# This symmetric matrix shows connection strength between each pair of omics layers
 design
+
+# Key points about design matrix:
+# - Higher values (closer to 1): seek stronger correlation between blocks
+# - Lower values (closer to 0): allow blocks to be more independent
+# - Common values: 0.1 (weak), 0.5 (moderate), 0.9 (strong)
 ```
 
 ## Tuning parameters
 ** [LOO-CV issue](https://mixomics-users.discourse.group/t/loo-cv-outputs-na-in-choice-ncomp/145/3) - you can look at the perf plot and decide on the number of components (Here, ncomp = 1).  
 ```{r}
-# Form basic DIABLO model with  an arbitrarily high number of components (ncomp = 5)
+# STEP 1: Tune the number of components (latent variables)
+# Reference: http://mixomics.org/methods/diablo/#tune-number-components
+
+# Create initial DIABLO model with arbitrarily high number of components
+# block.splsda = multiblock sparse Partial Least Squares Discriminant Analysis
+# This is the core function for DIABLO analysis
+# ncomp = 5: start with 5 components to evaluate optimal number
 basic.diablo.model = block.splsda(X = data, Y = Y, ncomp = 5, design = design)
 
-# Tuning the number of components ("loo" = leave-one-out cross-validation, for small sample sizes)
+# Evaluate model performance using cross-validation
+# perf() assesses classification performance for different numbers of components
+# validation = 'loo': leave-one-out cross-validation (recommended for small datasets)
+# Alternative: 'Mfold' for larger datasets
 perf.diablo = perf(basic.diablo.model, validation = 'loo', nrepeat = 1) 
-plot(perf.diablo) # plot output of tuning
-# Set the optimal ncomp value
+
+# Visualize performance metrics vs number of components
+# Look for the point where error rate plateaus or increases
+plot(perf.diablo)
+
+# Extract optimal number of components based on lowest error rate
+# "Overall.BER" = overall Balanced Error Rate (accounts for class imbalance)
+# "centroids.dist" = distance metric used for classification
 ncomp = perf.diablo$choice.ncomp$WeightedVote["Overall.BER", "centroids.dist"] 
-# Show the optimal choice for ncomp for each dist metric
+
+# Display optimal ncomp for all distance metrics
+# This helps verify consistency across different classification approaches
 perf.diablo$choice.ncomp$WeightedVote 
 ```
 
 ```{r}
-# Check output - basic DIABLO model
+# Preliminary visualization of basic DIABLO model
+# These plots help assess initial model quality before tuning
+
+# Sample plot: shows how samples separate in multiblock latent space
 plotIndiv(basic.diablo.model, ind.names=FALSE, legend=TRUE)
+
+# Loadings plot: shows which features contribute most to each component
 plotLoadings(basic.diablo.model)
 ```
 
@@ -69,84 +144,214 @@ plotLoadings(basic.diablo.model)
 ## Tuning the number of features 
 ** This may take some time to run (~ 5 min)
 ```{r}
-# Set grid of values for each component to test
-test.keepX = list (Transcript = seq(20,100,20), 
-                   Protein = seq(20,100,20),
-                   Metabolite_GC = seq(10,100,10)) 
+# STEP 2: Tune the number of features to retain per component
+# This performs feature selection to identify the most discriminative variables
+# Reference: http://mixomics.org/methods/diablo/#tune-keepx
 
-# Note: seq(10,100,10) = start from 10 and increase by 10 until 100
+# Define grid of feature numbers to test for each omics block
+# These ranges represent the number of variables to select per component
+test.keepX = list (Transcript = seq(20,100,20),      # Test 20, 40, 60, 80, 100 transcripts
+                   Protein = seq(20,100,20),         # Test 20, 40, 60, 80, 100 proteins
+                   Metabolite_GC = seq(10,100,10))   # Test 10, 20, 30, ..., 100 metabolites
 
-# Run the feature selection tuning (ncomp = 1 - from tuning the number of components)
+# Note: Metabolites have smaller range because datasets typically have fewer metabolites
+# seq(10,100,10) means: start at 10, increment by 10, stop at 100
+
+# Run feature selection tuning - THIS IS COMPUTATIONALLY INTENSIVE
+# tune.block.splsda tests all combinations in test.keepX to find optimal feature counts
+# validation = 'Mfold': M-fold cross-validation (splits data into folds)
+# folds = 5: use 5-fold CV (80% training, 20% testing in each iteration)
+# nrepeat = 10: repeat CV 10 times with different random splits for robustness
+# dist = "centroids.dist": classification based on distance to class centroids
 tune.SA = tune.block.splsda(X = data, Y = Y, ncomp = 1, 
                               test.keepX = test.keepX, design = design,
                               validation = 'Mfold', folds = 5, nrepeat = 10,
                               dist = "centroids.dist")
-# Set the optimal values of features to retain
+
+# Extract optimal number of features for each block
+# These values minimize classification error while maximizing model interpretability
 list.keepX = tune.SA$choice.keepX 
+
+# Display optimal feature counts
+# Example output: Transcript: 40, Protein: 60, Metabolite_GC: 30
 list.keepX
 ```
 
 
 ## Final DIABLO model
 ```{r}
-# Final model (use arbitrary number for # variables from our preliminary results in "Tuning the number of features")
+# STEP 3: Build final DIABLO model with optimized parameters
+# Use the optimal number of features identified from tuning
+# (or choose manually based on biological relevance and interpretability)
 
-list.keepX <-  list (Transcript =  20, 
-                    Protein =  20,
-                    Metabolite_GC = 10) 
+# Specify number of features to retain from each omics block
+# These are signature molecules that best discriminate between conditions
+list.keepX <-  list (Transcript =  20,        # Select top 20 discriminative transcripts
+                    Protein =  20,            # Select top 20 discriminative proteins
+                    Metabolite_GC = 10)       # Select top 10 discriminative metabolites
 
-# Set the optimised DIABLO model
+# Build final DIABLO model with optimized parameters
+# This model integrates all omics layers while maximizing:
+# 1. Discrimination between RPMI and SERUM conditions
+# 2. Correlation between selected features across omics layers
+# 3. Feature sparsity (selecting only most relevant variables)
 final.diablo.model = block.splsda(X = data, Y = Y, ncomp = 1, 
                                   keepX = list.keepX, design = design)
 
-final.diablo.model$design # design matrix for the final model
+# Display design matrix used in final model
+# Confirms the correlation structure between omics blocks
+final.diablo.model$design
 ```
 
 ## AUC for final model
 ```{r}
-auc.diablo.trans.com <- auroc(final.diablo.model, roc.block = "Transcript", roc.comp = 1,
-                        print = FALSE)
-auc.diablo.prot.com <- auroc(final.diablo.model, roc.block = "Protein", roc.comp = 1,
-                        print = FALSE)
-auc.diablo.met.GC.com <- auroc(final.diablo.model, roc.block = "Metabolite_GC", roc.comp = ,
-                        print = FALSE)
+# Calculate Area Under the ROC Curve (AUC) to assess model performance
+# AUC ranges from 0.5 (random) to 1.0 (perfect classification)
+# Reference: http://mixomics.org/methods/diablo/#model-performance
+
+# AUC for transcriptomics block, component 1
+# roc.block specifies which omics layer to evaluate
+# roc.comp specifies which component to evaluate
+# print = FALSE suppresses detailed output
+auc.diablo.trans.com <- auroc(final.diablo.model, 
+                               roc.block = "Transcript", 
+                               roc.comp = 1,
+                               print = FALSE)
+
+# AUC for proteomics block, component 1
+auc.diablo.prot.com <- auroc(final.diablo.model, 
+                              roc.block = "Protein", 
+                              roc.comp = 1,
+                              print = FALSE)
+
+# AUC for metabolomics block, component 1
+auc.diablo.met.GC.com <- auroc(final.diablo.model, 
+                                roc.block = "Metabolite_GC", 
+                                roc.comp = 1,
+                                print = FALSE)
+
+# Interpretation:
+# AUC > 0.9: Excellent discrimination
+# AUC 0.8-0.9: Good discrimination
+# AUC 0.7-0.8: Fair discrimination
+# AUC < 0.7: Poor discrimination
 ```
 
 ## Extract data from final DIABLO model 
 ```{r}
-# Variables selected on component 1
+# Extract the selected discriminative variables from each omics block
+# These are the "signature" molecules that best distinguish between conditions
+# Reference: http://mixomics.org/methods/diablo/#variable-selection
+
+# Extract selected transcripts from component 1
+# Returns variable names and their contribution values
 trans_var <- selectVar(final.diablo.model, block = 'Transcript', comp = 1)
+
+# Extract selected proteins from component 1
 prot_var <- selectVar(final.diablo.model, block = 'Protein', comp = 1)
+
+# Extract selected metabolites from component 1
 met_GC_var <- selectVar(final.diablo.model, block = 'Metabolite_GC', comp = 1)
 
-# Correlation matrix from the circos plot
+# Extract correlation matrix between selected variables
+# This matrix is used to generate the circos plot
+# cutoff = 0.7: only show correlations with |r| > 0.7 (strong correlations)
 corMat <- circosPlot(final.diablo.model, cutoff = 0.7)
+
+# Convert correlation matrix to data frame for further analysis
+# Useful for identifying highly correlated multi-omics modules
 corMat2 <- as.data.frame(corMat)
 ```
 
 ## Data visualization
 ```{r}
-# Sample plots
+# Visualize sample clustering in the integrated multi-omics space
+# plotDiablo creates an arrow plot showing sample projections from each omics block
+# Reference: http://mixomics.org/graphics/sample-plots/plotdiablo/
+
+# Sample plots (arrow plot)
+# Each panel shows samples from one omics block
+# Arrows connect the same sample across different omics representations
+# Samples that cluster together share similar molecular profiles
 plotDiablo(final.diablo.model, ncomp = 1)
+
+# Interpretation:
+# - Consistent arrow directions: good agreement between omics layers
+# - Sample separation: clear distinction between RPMI and SERUM conditions
+# - Arrow length: magnitude of projection (longer = stronger signal)
 ```
 
 ```{r fig.height=6, fig.width=6}
-# Plot Loadings
+# Visualize feature contributions (loadings) for each omics block
+# Shows which variables contribute most to discrimination between conditions
+# Reference: http://mixomics.org/graphics/variable-plots/plotloadings/
+
+# Plot loadings for all blocks on component 1
+# contrib = 'max': color bars by maximum contribution
+# method = 'median': order features by median absolute loading value
+# size.name = 0.65: adjust text size for feature names
 plotLoadings(final.diablo.model, comp = 1, contrib = 'max', method = 'median', size.name = 0.65)
+
+# Interpretation:
+# - Bar length: strength of variable's contribution
+# - Bar color: which class the variable is most associated with
+# - These are the key discriminative features (biomarker candidates)
 ```
 
 
 ```{r fig.height=10, fig.width=10}
-# Circos plot 
+# Create circos plot to visualize correlations between selected variables
+# This plot shows the multi-omics correlation network
+# Reference: http://mixomics.org/graphics/variable-plots/circosplot/
+
+# Circos plot parameters:
+# cutoff = 0.9: only display correlations with |r| > 0.9 (very strong correlations)
+# comp = 1: use correlations from component 1
+# line = TRUE: draw lines representing correlations between variables
+# color.blocks: assign colors to each omics block for visual distinction
+#   - darkorchid: Transcripts
+#   - brown1: Proteins  
+#   - lightgreen: Metabolites
+# color.cor: color scheme for correlation lines
+#   - chocolate3: positive correlations
+#   - grey20: negative correlations
+# size parameters: control text and element sizes for readability
 circosPlot(final.diablo.model, cutoff = 0.9, comp = 1, line = TRUE, 
            color.blocks = c('darkorchid', 'brown1', 'lightgreen'),
-           color.cor = c("chocolate3","grey20"), size.labels = 1.2, size.variables = 0.5, size.legend = 1)
+           color.cor = c("chocolate3","grey20"), 
+           size.labels = 1.2, size.variables = 0.5, size.legend = 1)
+
+# Interpretation:
+# - Each arc represents one omics block with selected variables
+# - Lines connecting variables show strong correlations (|r| > 0.9)
+# - Clusters of connected variables represent coordinated multi-omics modules
+# - These modules may represent co-regulated biological pathways
 ```
 
 ## Save 
 ```{r fig.height=10, fig.width=10}
-# Save data for further visualization in Cytoscape
+# Export DIABLO network for visualization in Cytoscape
+# Cytoscape provides advanced network layout and styling options
+# Reference: http://mixomics.org/graphics/variable-plots/network/
+
+# Create network object from DIABLO model
+# network() extracts correlation network between selected variables
+# blocks = c(1,2,3): include all three omics blocks (Transcript, Protein, Metabolite_GC)
+# cutoff = 0.9: only include edges (correlations) with |r| > 0.9
 myNetwork <- network(final.diablo.model, blocks = c(1,2,3), cutoff = 0.9) 
-write_graph(myNetwork$gR, file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Strep.gml", format = "gml")
+
+# Export network to GML format (Graph Modeling Language)
+# GML files can be imported into Cytoscape for interactive visualization
+# The network includes:
+# - Nodes: selected variables from each omics block
+# - Edges: strong correlations (|r| > 0.9) between variables
+# - Node attributes: omics type, variable name, contribution values
+# - Edge attributes: correlation coefficients
+write_graph(myNetwork$gR, 
+            file = "/Users/wmujchariyak/Desktop/myNetwork_conserved_Strep.gml", 
+            format = "gml")
+
+# Next step: Import this GML file into Cytoscape (see 3_Cytoscape_Strep_081025.R)
+# for advanced network visualization, clustering, and annotation
 ```
 
