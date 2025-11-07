@@ -59,6 +59,7 @@ Recommended tools/resources for input data preparation:
     - A web application for data normalization, analysis and visualisation - [MetaboAnalyst](https://www.metaboanalyst.ca/)
     - R packages for raw data preprocessing - [XCMS](https://www.bioconductor.org/packages/devel/bioc/vignettes/xcms/inst/doc/xcms.html#1_Introduction)
     - Softwares for raw data preprocessing, data normalization, analysis and visualisation - [MZmine 3](https://mzmine.github.io/development.html)
+      
 For more details on required input data formats, please review ["INPUT_DATA_FORMAT.md"](https://github.com/warasinee/Multiomics_Case_Study/blob/main/INPUT_DATA_FORMAT.md)
 
 ## PART 1: Multi-omics Data Exporation and Integration Using MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
