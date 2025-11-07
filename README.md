@@ -48,7 +48,8 @@ BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
 - Cytoscape (≥ 3.9 recommended) for interactive network visualisation
 ---
 
-## Data preprocessing
+## [Input data requirement and preprocessing](https://github.com/warasinee/Multiomics_Case_Study/blob/main/INPUT_DATA_FORMAT.md)
+Recommended tools/resources for input data preparation:
 1. Transcriptome (RNA-seq data)
     - A web application for RNA-seq exploration, analysis and visualisation - [Degust](https://degust.erc.monash.edu/)
     - R packages for data normalisation and Differentially Expression (DE) Analysis - Limma/Voom, edgeR, DESeq
@@ -58,6 +59,7 @@ BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
     - A web application for data normalization, analysis and visualisation - [MetaboAnalyst](https://www.metaboanalyst.ca/)
     - R packages for raw data preprocessing - [XCMS](https://www.bioconductor.org/packages/devel/bioc/vignettes/xcms/inst/doc/xcms.html#1_Introduction)
     - Softwares for raw data preprocessing, data normalization, analysis and visualisation - [MZmine 3](https://mzmine.github.io/development.html)
+For more details on required input data formats, please review ["INPUT_DATA_FORMAT.md"](https://github.com/warasinee/Multiomics_Case_Study/blob/main/INPUT_DATA_FORMAT.md)
 
 ## PART 1: Multi-omics Data Exporation and Integration Using MixOmics  <img src="https://github.com/warasinee/Multiomics_Analyses_2024/blob/main/Image/MixOmics_Logo.png" width=5% height=5%>
 
