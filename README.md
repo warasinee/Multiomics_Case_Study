@@ -1,4 +1,4 @@
-# Multi-omics: Case Study 
+# Practical Resource for Multi-Omics Data Integration in Microbial Systems 
 
 This repository is a reproducible walkthrough of a multi-omics integration and enrichment analysis pipeline. It demonstrates:
 - Unsupervised data exploration (PCA and PLS via `mixOmics`)
