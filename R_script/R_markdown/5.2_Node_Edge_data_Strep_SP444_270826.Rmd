@@ -1,0 +1,128 @@
+---
+title: "Preparing node and edge data for network analysis"
+author: "Warasinee Mujchariyakul"
+output: html_document
+date: "2026-08-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load R packages
+```{r}
+library(DOSE)
+library(clusterProfiler)
+library(RCy3)
+library(igraph)
+library(tidyverse)
+```
+
+## Import ORA and GSEA results for all strains and all omics
+```{r}
+ORA_GSEA_list <- readRDS("/Users/wmujchariyak/Desktop/ORA_GSEA_list_Strep.rds") 
+
+# Import ORA results for all strains and all omics
+Trans.list.ORA <- ORA_GSEA_list[["Transcriptomics RG"]]$ORA 
+Prot.list.ORA <- ORA_GSEA_list[["Proteomics MS1 DDA"]]$ORA 
+Met.GC.list.ORA <- ORA_GSEA_list[["Metabolomics GC-MS"]]$ORA  
+
+# Import GSEA results for all strains and all omics
+Trans.list.GSEA <- ORA_GSEA_list[["Transcriptomics RG"]]$GSEA 
+Prot.list.GSEA <- ORA_GSEA_list[["Proteomics MS1 DDA"]]$GSEA
+Met.GC.list.GSEA <- ORA_GSEA_list[["Metabolomics GC-MS"]]$GSEA
+```
+
+## Collect node and edge data - strain SP444
+```{r}
+# Prepare Data for network analysis (e.g., node and edge)
+# Example for only strain SP444 (ORA - KEGG)
+
+# 1. Prepare data 
+# 1.1 Subset GSEA (KEGG) - trans  
+Trans.SP444.GSEA.KEGG.sig <- clusterProfiler::filter(Trans.list.GSEA[["SP444"]], p.adjust < 0.05, grepl("^map", ID))
+Trans.SP444.GSEA.KEGG.sig.p <- clusterProfiler::filter(Trans.list.GSEA[["SP444"]], pvalue < 0.05, grepl("^map", ID)) 
+
+# 1.2 Subset GSEA (KEGG) - prot (we use pvalue instead of p.adjust)
+Prot.SP444.GSEA.KEGG.sig <- clusterProfiler::filter(Prot.list.GSEA[["SP444"]], p.adjust < 0.05, grepl("^map", ID)) # no pathways pass the threshold
+Prot.SP444.GSEA.KEGG.sig.p <- clusterProfiler::filter(Prot.list.GSEA[["SP444"]], pvalue < 0.05, grepl("^map", ID)) # 
+
+Met.GC.SP444.GSEA.KEGG.sig <- clusterProfiler::filter(Met.GC.list.GSEA[["SP444"]], p.adjust < 0.05, grepl("^map", ID)) # no pathways pass the threshold
+Met.GC.SP444.GSEA.KEGG.sig.p <- clusterProfiler::filter(Met.GC.list.GSEA[["SP444"]], pvalue < 0.05, grepl("^map", ID)) 
+
+
+# 2. Extract node and edge data from Trans.GSEA.KEGG 
+      # Check class of obj. - For example, class(Trans.SP444.GSEA.KEGG.sig) -> an enrichResult object 
+
+# 2.1 Calculate pairwise similarity (of the enriched terms using Jaccard’s similarity index)
+      # Check added similarity matrix in the termsim slot of enrichment result 
+      # For example, View(Trans.SP444.GSEA.KEGG.sig_2@termsim)
+Trans.SP444.GSEA.KEGG.sig_2 <- enrichplot::pairwise_termsim(Trans.SP444.GSEA.KEGG.sig, method = "JC")  
+Prot.SP444.GSEA.KEGG.sig.p_2 <- enrichplot::pairwise_termsim(Prot.SP444.GSEA.KEGG.sig.p, method = "JC")  
+
+# 2.2 Create Enrichment map 
+emap_Trans.SP444.GSEA.KEGG.sig <- enrichplot::emapplot(Trans.SP444.GSEA.KEGG.sig_2)
+emap_Prot.SP444.GSEA.KEGG.sig.p <- enrichplot::emapplot(Prot.SP444.GSEA.KEGG.sig.p_2)
+
+# 2.3 Function to convert enrichment map to dataframe
+emap_to_network_df <- function(emap, what = "edges"){
+  if (what == "vertices"){
+    df <- emap$data %>% 
+      attributes %>% # provide data attributes in list
+      .$graph %>% # access an attribute named graph (which is in igraph format containing vertices (node) and edges) 
+      igraph::as_data_frame(what = "vertices") %>% # convert igraph nodes (vertices) to dataframe
+      rename(gene_set_size = "size") %>%
+      rename(p.adjust = "color") %>%
+      select(name, gene_set_size, p.adjust)
+    return(df)
+  } else if (what == "edges"){
+    df <- emap$data %>%
+      attributes %>%
+      .$graph %>%
+      igraph::as_data_frame(what = "edges") %>%
+      rename(similarity = "weight") %>%
+      select(from, to, similarity)
+    return(df)
+  } else {
+    return(print("error what should be set to edges or nodes"))
+  }
+}
+
+# 2.4 Concatenate edges df and node df of the 2 omics
+all_edge_SP444_GSEA_KEGG <- rbind(emap_to_network_df(emap_Trans.SP444.GSEA.KEGG.sig),
+                                 emap_to_network_df(emap_Prot.SP444.GSEA.KEGG.sig.p)) %>%
+  dplyr::rowwise() %>% # allows you to compute on a data frame a row-at-a-time
+  dplyr::mutate(edge = paste0(sort(c(from, to)), collapse = "#")) %>%
+  dplyr::group_by(edge) %>%
+  dplyr::summarize(nb_condition_with_edge = n(),
+                   #similarity = paste0(similarity, collapse = ",")) %>%
+                   similarity = mean(similarity)) %>%
+  ungroup() %>%
+  tidyr::separate(edge, sep = "#", into = c("to", "from")) %>%
+  dplyr::select(from, to, nb_condition_with_edge, similarity)
+
+all_node_SP444_GSEA_KEGG <- rbind(emap_to_network_df(emap_Trans.SP444.GSEA.KEGG.sig, what = "vertices") %>%   
+                            mutate(condition = "Transcriptome"),
+                            emap_to_network_df(emap_Prot.SP444.GSEA.KEGG.sig.p, what = "vertices") %>%
+                            mutate(condition = "Proteome")) %>%
+  dplyr::group_by(name) %>%
+  dplyr::summarize(nb_condition_with_node = n(),
+                   condition_info = paste0(condition, collapse = ","),
+                   #gene_set_size = paste0(gene_set_size, collapse = ","),
+                   gene_set_size = mean(gene_set_size)
+                   #,p.adjust =paste0(p.adjust, collapse = ",")
+                   ) %>%
+  ungroup()
+
+# Check output
+head(all_edge_SP444_GSEA_KEGG, 5)
+head(all_node_SP444_GSEA_KEGG, 5)
+
+# 3. Save data
+write.table(all_edge_SP444_GSEA_KEGG, "/Users/wmujchariyak/Desktop/Strep_all_edge_SP444_GSEA_KEGG_updated.tsv", sep = "\t", row.names = F)
+write.table(all_node_SP444_GSEA_KEGG, "/Users/wmujchariyak/Desktop/Strep_all_node_SP444_GSEA_KEGG_updated.tsv", sep = "\t", row.names = F)
+
+```
+
+
+
