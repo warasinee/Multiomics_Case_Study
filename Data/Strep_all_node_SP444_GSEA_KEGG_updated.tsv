@@ -1,0 +1,37 @@
+"name"	"nb_condition_with_node"	"condition_info"	"gene_set_size"
+"Alanine, aspartate and glutamate metabolism"	1	"Proteome"	6
+"Amino sugar and nucleotide sugar metabolism"	1	"Transcriptome"	21
+"Aminoacyl-tRNA biosynthesis"	1	"Transcriptome"	15
+"Ascorbate and aldarate metabolism"	1	"Transcriptome"	15
+"Biosynthesis of amino acids"	1	"Transcriptome"	37
+"Biosynthesis of antibiotics"	1	"Transcriptome"	59
+"Biosynthesis of secondary metabolites"	1	"Transcriptome"	81
+"Butanoate metabolism"	2	"Transcriptome,Proteome"	11
+"Carbon metabolism"	1	"Transcriptome"	47
+"Citrate cycle (TCA cycle)"	1	"Transcriptome"	9
+"Degradation of aromatic compounds"	1	"Transcriptome"	8
+"Epithelial cell signaling in Helicobacter pylori infection"	1	"Transcriptome"	5
+"Fructose and mannose metabolism"	1	"Transcriptome"	27
+"Galactose metabolism"	1	"Transcriptome"	37
+"Glycerophospholipid metabolism"	1	"Proteome"	2
+"Glycolysis / Gluconeogenesis"	1	"Transcriptome"	27
+"Glyoxylate and dicarboxylate metabolism"	1	"Transcriptome"	15
+"Histidine metabolism"	1	"Transcriptome"	7
+"Lysine degradation"	1	"Transcriptome"	9
+"Metabolic pathways"	1	"Transcriptome"	176
+"Microbial metabolism in diverse environments"	2	"Transcriptome,Proteome"	42.5
+"One carbon pool by folate"	1	"Transcriptome"	12
+"Other glycan degradation"	1	"Transcriptome"	7
+"Pantothenate and CoA biosynthesis"	1	"Proteome"	4
+"Pentose and glucuronate interconversions"	1	"Transcriptome"	12
+"Phosphotransferase system (PTS)"	1	"Transcriptome"	26
+"Propanoate metabolism"	1	"Transcriptome"	20
+"Pyruvate metabolism"	2	"Transcriptome,Proteome"	17.5
+"RNA degradation"	1	"Transcriptome"	9
+"Ribosome"	1	"Transcriptome"	49
+"Starch and sucrose metabolism"	1	"Transcriptome"	25
+"Synthesis and degradation of ketone bodies"	1	"Transcriptome"	6
+"Two-component system"	1	"Proteome"	19
+"Valine, leucine and isoleucine degradation"	1	"Transcriptome"	15
+"Vancomycin resistance"	1	"Proteome"	6
+"beta-Lactam resistance"	1	"Proteome"	8

@@ -1,0 +1,130 @@
+"from"	"to"	"nb_condition_with_edge"	"similarity"
+"Fructose and mannose metabolism"	"Amino sugar and nucleotide sugar metabolism"	2	0.277680906713165
+"Galactose metabolism"	"Amino sugar and nucleotide sugar metabolism"	1	0.260869565217391
+"Glycolysis / Gluconeogenesis"	"Amino sugar and nucleotide sugar metabolism"	1	0.2
+"Phosphotransferase system (PTS)"	"Amino sugar and nucleotide sugar metabolism"	2	0.288095238095238
+"Starch and sucrose metabolism"	"Amino sugar and nucleotide sugar metabolism"	2	0.211323763955343
+"Chloroalkane and chloroalkene degradation"	"Ascorbate and aldarate metabolism"	1	0.25
+"Fructose and mannose metabolism"	"Ascorbate and aldarate metabolism"	2	0.214168714168714
+"Microbial metabolism in diverse environments"	"Ascorbate and aldarate metabolism"	5	0.23256478978635
+"Pentose and glucuronate interconversions"	"Ascorbate and aldarate metabolism"	3	0.221646169922032
+"Phosphotransferase system (PTS)"	"Ascorbate and aldarate metabolism"	3	0.233921633921634
+"Biosynthesis of antibiotics"	"Biosynthesis of amino acids"	2	0.497198879551821
+"Biosynthesis of secondary metabolites"	"Biosynthesis of amino acids"	5	0.395653808397711
+"Carbon metabolism"	"Biosynthesis of amino acids"	5	0.370811598572793
+"Metabolic pathways"	"Biosynthesis of amino acids"	5	0.218933475229517
+"Microbial metabolism in diverse environments"	"Biosynthesis of amino acids"	5	0.327140840037998
+"Pentose phosphate pathway"	"Biosynthesis of amino acids"	4	0.333014683959451
+"Purine metabolism"	"Biosynthesis of amino acids"	1	0.217391304347826
+"Pyrimidine metabolism"	"Biosynthesis of amino acids"	2	0.246992481203007
+"Biosynthesis of secondary metabolites"	"Biosynthesis of antibiotics"	2	0.683641975308642
+"Carbon metabolism"	"Biosynthesis of antibiotics"	2	0.518115942028986
+"Citrate cycle (TCA cycle)"	"Biosynthesis of antibiotics"	1	0.217391304347826
+"Degradation of aromatic compounds"	"Biosynthesis of antibiotics"	1	0.239130434782609
+"Glycolysis / Gluconeogenesis"	"Biosynthesis of antibiotics"	2	0.266791044776119
+"Glyoxylate and dicarboxylate metabolism"	"Biosynthesis of antibiotics"	1	0.233333333333333
+"Metabolic pathways"	"Biosynthesis of antibiotics"	2	0.345908210007047
+"Microbial metabolism in diverse environments"	"Biosynthesis of antibiotics"	2	0.485955056179775
+"Pentose phosphate pathway"	"Biosynthesis of antibiotics"	1	0.232142857142857
+"Propanoate metabolism"	"Biosynthesis of antibiotics"	2	0.290249433106576
+"Purine metabolism"	"Biosynthesis of antibiotics"	1	0.258620689655172
+"Pyruvate metabolism"	"Biosynthesis of antibiotics"	2	0.254328358208955
+"Valine, leucine and isoleucine degradation"	"Biosynthesis of antibiotics"	1	0.213114754098361
+"Carbon metabolism"	"Biosynthesis of secondary metabolites"	5	0.402291243088996
+"Galactose metabolism"	"Biosynthesis of secondary metabolites"	4	0.25062736322817
+"Glycolysis / Gluconeogenesis"	"Biosynthesis of secondary metabolites"	4	0.261416066714373
+"Metabolic pathways"	"Biosynthesis of secondary metabolites"	5	0.491299241056613
+"Microbial metabolism in diverse environments"	"Biosynthesis of secondary metabolites"	5	0.369481999731595
+"Pentose phosphate pathway"	"Biosynthesis of secondary metabolites"	4	0.22350528018774
+"Propanoate metabolism"	"Biosynthesis of secondary metabolites"	1	0.22972972972973
+"Purine metabolism"	"Biosynthesis of secondary metabolites"	3	0.301788617886179
+"Pyruvate metabolism"	"Biosynthesis of secondary metabolites"	1	0.229885057471264
+"Carbon metabolism"	"Butanoate metabolism"	1	0.226415094339623
+"Glyoxylate and dicarboxylate metabolism"	"Butanoate metabolism"	1	0.222222222222222
+"Lysine degradation"	"Butanoate metabolism"	1	0.227272727272727
+"Microbial metabolism in diverse environments"	"Butanoate metabolism"	1	0.25
+"Propanoate metabolism"	"Butanoate metabolism"	1	0.407407407407407
+"Pyruvate metabolism"	"Butanoate metabolism"	1	0.419354838709677
+"Synthesis and degradation of ketone bodies"	"Butanoate metabolism"	1	0.333333333333333
+"Valine, leucine and isoleucine degradation"	"Butanoate metabolism"	1	0.32
+"Citrate cycle (TCA cycle)"	"Carbon metabolism"	1	0.3
+"Degradation of aromatic compounds"	"Carbon metabolism"	1	0.290322580645161
+"Fructose and mannose metabolism"	"Carbon metabolism"	2	0.245252373813093
+"Galactose metabolism"	"Carbon metabolism"	1	0.232876712328767
+"Glycolysis / Gluconeogenesis"	"Carbon metabolism"	4	0.270638996201444
+"Glyoxylate and dicarboxylate metabolism"	"Carbon metabolism"	1	0.291666666666667
+"Metabolic pathways"	"Carbon metabolism"	5	0.262087848270019
+"Microbial metabolism in diverse environments"	"Carbon metabolism"	5	0.560283063168342
+"Pentose phosphate pathway"	"Carbon metabolism"	4	0.430386049665226
+"Propanoate metabolism"	"Carbon metabolism"	2	0.35934819897084
+"Pyrimidine metabolism"	"Carbon metabolism"	1	0.222222222222222
+"Pyruvate metabolism"	"Carbon metabolism"	3	0.329405162738496
+"Valine, leucine and isoleucine degradation"	"Carbon metabolism"	1	0.26530612244898
+"Degradation of aromatic compounds"	"Chloroalkane and chloroalkene degradation"	1	0.416666666666667
+"Glycolysis / Gluconeogenesis"	"Chloroalkane and chloroalkene degradation"	1	0.25
+"Propanoate metabolism"	"Chloroalkane and chloroalkene degradation"	1	0.31578947368421
+"Degradation of aromatic compounds"	"Citrate cycle (TCA cycle)"	2	0.271493212669683
+"Glycolysis / Gluconeogenesis"	"Citrate cycle (TCA cycle)"	2	0.250319284802043
+"Glyoxylate and dicarboxylate metabolism"	"Citrate cycle (TCA cycle)"	1	0.263157894736842
+"Lysine degradation"	"Citrate cycle (TCA cycle)"	1	0.285714285714286
+"Microbial metabolism in diverse environments"	"Citrate cycle (TCA cycle)"	1	0.227272727272727
+"Propanoate metabolism"	"Citrate cycle (TCA cycle)"	2	0.45
+"Pyruvate metabolism"	"Citrate cycle (TCA cycle)"	2	0.437782805429864
+"Valine, leucine and isoleucine degradation"	"Citrate cycle (TCA cycle)"	1	0.6
+"Glycolysis / Gluconeogenesis"	"Degradation of aromatic compounds"	2	0.298076923076923
+"Glyoxylate and dicarboxylate metabolism"	"Degradation of aromatic compounds"	1	0.277777777777778
+"Lysine degradation"	"Degradation of aromatic compounds"	1	0.214285714285714
+"Microbial metabolism in diverse environments"	"Degradation of aromatic compounds"	1	0.25
+"Pentose and glucuronate interconversions"	"Degradation of aromatic compounds"	1	0.285714285714286
+"Propanoate metabolism"	"Degradation of aromatic compounds"	2	0.45
+"Pyruvate metabolism"	"Degradation of aromatic compounds"	1	0.227272727272727
+"Valine, leucine and isoleucine degradation"	"Degradation of aromatic compounds"	1	0.277777777777778
+"Fatty acid metabolism"	"Fatty acid biosynthesis"	4	0.959935897435897
+"Prodigiosin biosynthesis"	"Fatty acid biosynthesis"	2	0.261363636363636
+"Prodigiosin biosynthesis"	"Fatty acid metabolism"	2	0.251748251748252
+"Galactose metabolism"	"Fructose and mannose metabolism"	5	0.493846591049497
+"Microbial metabolism in diverse environments"	"Fructose and mannose metabolism"	4	0.25603954041454
+"Pentose and glucuronate interconversions"	"Fructose and mannose metabolism"	2	0.207535885167464
+"Pentose phosphate pathway"	"Fructose and mannose metabolism"	4	0.279172726783021
+"Phosphotransferase system (PTS)"	"Fructose and mannose metabolism"	5	0.260203853753785
+"Glycolysis / Gluconeogenesis"	"Galactose metabolism"	3	0.207259063101499
+"Metabolic pathways"	"Galactose metabolism"	5	0.252217016127834
+"Microbial metabolism in diverse environments"	"Galactose metabolism"	1	0.21875
+"Pentose and glucuronate interconversions"	"Galactose metabolism"	3	0.242727272727273
+"Pentose phosphate pathway"	"Galactose metabolism"	3	0.235238254846098
+"Phosphotransferase system (PTS)"	"Galactose metabolism"	5	0.279348759323731
+"Starch and sucrose metabolism"	"Galactose metabolism"	5	0.342046911554705
+"Glyoxylate and dicarboxylate metabolism"	"Glycolysis / Gluconeogenesis"	1	0.2
+"Microbial metabolism in diverse environments"	"Glycolysis / Gluconeogenesis"	4	0.235869476933073
+"Pentose and glucuronate interconversions"	"Glycolysis / Gluconeogenesis"	4	0.264806547619048
+"Pentose phosphate pathway"	"Glycolysis / Gluconeogenesis"	1	0.236842105263158
+"Propanoate metabolism"	"Glycolysis / Gluconeogenesis"	2	0.412807881773399
+"Pyruvate metabolism"	"Glycolysis / Gluconeogenesis"	2	0.276113671274962
+"Starch and sucrose metabolism"	"Glycolysis / Gluconeogenesis"	3	0.28601209089014
+"Valine, leucine and isoleucine degradation"	"Glycolysis / Gluconeogenesis"	1	0.272727272727273
+"Lysine degradation"	"Glyoxylate and dicarboxylate metabolism"	1	0.333333333333333
+"Propanoate metabolism"	"Glyoxylate and dicarboxylate metabolism"	1	0.4
+"Pyruvate metabolism"	"Glyoxylate and dicarboxylate metabolism"	1	0.28125
+"Valine, leucine and isoleucine degradation"	"Glyoxylate and dicarboxylate metabolism"	1	0.428571428571429
+"Propanoate metabolism"	"Lysine degradation"	1	0.45
+"Pyruvate metabolism"	"Lysine degradation"	1	0.25
+"Synthesis and degradation of ketone bodies"	"Lysine degradation"	1	0.363636363636364
+"Valine, leucine and isoleucine degradation"	"Lysine degradation"	1	0.6
+"Microbial metabolism in diverse environments"	"Metabolic pathways"	5	0.39045384592669
+"Purine metabolism"	"Metabolic pathways"	2	0.210093339661446
+"Pentose and glucuronate interconversions"	"Microbial metabolism in diverse environments"	1	0.224489795918367
+"Pentose phosphate pathway"	"Microbial metabolism in diverse environments"	4	0.307432165437302
+"Propanoate metabolism"	"Microbial metabolism in diverse environments"	2	0.35479797979798
+"Pyruvate metabolism"	"Microbial metabolism in diverse environments"	3	0.284868078781122
+"Valine, leucine and isoleucine degradation"	"Microbial metabolism in diverse environments"	1	0.208333333333333
+"Pentose and glucuronate interconversions"	"Other glycan degradation"	5	0.26469507101086
+"Pentose phosphate pathway"	"Pentose and glucuronate interconversions"	4	0.2312743707905
+"Propanoate metabolism"	"Pentose and glucuronate interconversions"	1	0.206896551724138
+"Propanoate metabolism"	"Pentose phosphate pathway"	1	0.2
+"Starch and sucrose metabolism"	"Phosphotransferase system (PTS)"	5	0.261804103755323
+"Pyruvate metabolism"	"Propanoate metabolism"	2	0.575268817204301
+"Synthesis and degradation of ketone bodies"	"Propanoate metabolism"	1	0.3
+"Valine, leucine and isoleucine degradation"	"Propanoate metabolism"	1	0.75
+"Pyrimidine metabolism"	"Purine metabolism"	2	0.288537549407115
+"Valine, leucine and isoleucine degradation"	"Pyruvate metabolism"	1	0.413793103448276
+"Valine, leucine and isoleucine degradation"	"Synthesis and degradation of ketone bodies"	1	0.4
