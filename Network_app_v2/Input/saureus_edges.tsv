@@ -1,0 +1,111 @@
+"from"	"to"	"nb_condition_with_edge"	"similarity"
+"Biosynthesis of amino acids"	"2-Oxocarboxylic acid metabolism"	2	0.271052631578947
+"C5-Branched dibasic acid metabolism"	"2-Oxocarboxylic acid metabolism"	3	0.383241758241758
+"Lysine biosynthesis"	"2-Oxocarboxylic acid metabolism"	1	0.342105263157895
+"Valine, leucine and isoleucine biosynthesis"	"2-Oxocarboxylic acid metabolism"	3	0.460774857326581
+"Arginine and proline metabolism"	"Alanine, aspartate and glutamate metabolism"	1	0.244897959183673
+"Biosynthesis of amino acids"	"Alanine, aspartate and glutamate metabolism"	1	0.216867469879518
+"beta-Alanine metabolism"	"Alanine, aspartate and glutamate metabolism"	1	0.2
+"Histidine metabolism"	"Arginine and proline metabolism"	1	0.230769230769231
+"Fatty acid degradation"	"Ascorbate and aldarate metabolism"	1	0.3
+"Fructose and mannose metabolism"	"Ascorbate and aldarate metabolism"	3	0.22394342831073
+"Glycerolipid metabolism"	"Ascorbate and aldarate metabolism"	1	0.275
+"Inositol phosphate metabolism"	"Ascorbate and aldarate metabolism"	2	0.261111111111111
+"Microbial metabolism in diverse environments"	"Ascorbate and aldarate metabolism"	1	0.208333333333333
+"Pentose and glucuronate interconversions"	"Ascorbate and aldarate metabolism"	1	0.382352941176471
+"Pentose phosphate pathway"	"Ascorbate and aldarate metabolism"	2	0.240372272143774
+"Tyrosine metabolism"	"Ascorbate and aldarate metabolism"	1	0.321428571428571
+"Biosynthesis of antibiotics"	"Biosynthesis of amino acids"	2	0.496006470528764
+"Biosynthesis of secondary metabolites"	"Biosynthesis of amino acids"	2	0.446465501034029
+"Carbon metabolism"	"Biosynthesis of amino acids"	2	0.333626039105491
+"Cysteine and methionine metabolism"	"Biosynthesis of amino acids"	1	0.274509803921569
+"Glycine, serine and threonine metabolism"	"Biosynthesis of amino acids"	1	0.272727272727273
+"Lysine biosynthesis"	"Biosynthesis of amino acids"	1	0.28125
+"Metabolic pathways"	"Biosynthesis of amino acids"	2	0.290583510692206
+"Methane metabolism"	"Biosynthesis of amino acids"	1	0.202247191011236
+"Microbial metabolism in diverse environments"	"Biosynthesis of amino acids"	2	0.38791144200627
+"Valine, leucine and isoleucine biosynthesis"	"Biosynthesis of amino acids"	1	0.211267605633803
+"Biosynthesis of secondary metabolites"	"Biosynthesis of antibiotics"	3	0.710949322659415
+"Butanoate metabolism"	"Biosynthesis of antibiotics"	1	0.213114754098361
+"Carbon metabolism"	"Biosynthesis of antibiotics"	4	0.512222977217963
+"Glycine, serine and threonine metabolism"	"Biosynthesis of antibiotics"	1	0.297872340425532
+"Glycolysis / Gluconeogenesis"	"Biosynthesis of antibiotics"	4	0.298460993592839
+"Glyoxylate and dicarboxylate metabolism"	"Biosynthesis of antibiotics"	3	0.304236606456345
+"Metabolic pathways"	"Biosynthesis of antibiotics"	4	0.448705447526748
+"Methane metabolism"	"Biosynthesis of antibiotics"	2	0.208527131782946
+"Microbial metabolism in diverse environments"	"Biosynthesis of antibiotics"	4	0.541017926782593
+"Pentose phosphate pathway"	"Biosynthesis of antibiotics"	1	0.208
+"Carbon metabolism"	"Biosynthesis of secondary metabolites"	4	0.440883959927504
+"Glycine, serine and threonine metabolism"	"Biosynthesis of secondary metabolites"	1	0.225641025641026
+"Glycolysis / Gluconeogenesis"	"Biosynthesis of secondary metabolites"	4	0.232841015119763
+"Glyoxylate and dicarboxylate metabolism"	"Biosynthesis of secondary metabolites"	2	0.222156235724075
+"Metabolic pathways"	"Biosynthesis of secondary metabolites"	4	0.584487773097867
+"Microbial metabolism in diverse environments"	"Biosynthesis of secondary metabolites"	4	0.488895271128458
+"Pentose phosphate pathway"	"Biosynthesis of secondary metabolites"	1	0.2
+"Carbon metabolism"	"Butanoate metabolism"	1	0.202127659574468
+"Fatty acid degradation"	"Butanoate metabolism"	1	0.483870967741935
+"Glycolysis / Gluconeogenesis"	"Butanoate metabolism"	1	0.25
+"Glyoxylate and dicarboxylate metabolism"	"Butanoate metabolism"	1	0.333333333333333
+"Inositol phosphate metabolism"	"Butanoate metabolism"	1	0.314285714285714
+"Pentose phosphate pathway"	"Butanoate metabolism"	1	0.208333333333333
+"Tyrosine metabolism"	"Butanoate metabolism"	1	0.257142857142857
+"Methane metabolism"	"C5-Branched dibasic acid metabolism"	1	0.205882352941176
+"Valine, leucine and isoleucine biosynthesis"	"C5-Branched dibasic acid metabolism"	3	0.477222467934542
+"Fructose and mannose metabolism"	"Carbon metabolism"	1	0.202020202020202
+"Glycine, serine and threonine metabolism"	"Carbon metabolism"	1	0.327272727272727
+"Glycolysis / Gluconeogenesis"	"Carbon metabolism"	5	0.326389451057785
+"Glyoxylate and dicarboxylate metabolism"	"Carbon metabolism"	3	0.389629619207084
+"Metabolic pathways"	"Carbon metabolism"	5	0.317962157215791
+"Methane metabolism"	"Carbon metabolism"	4	0.337789452263137
+"Microbial metabolism in diverse environments"	"Carbon metabolism"	5	0.586075908800423
+"Pentose phosphate pathway"	"Carbon metabolism"	4	0.354249535234487
+"Inositol phosphate metabolism"	"Clavulanic acid biosynthesis"	1	0.2
+"Glycine, serine and threonine metabolism"	"Cysteine and methionine metabolism"	1	0.35593220338983
+"Lysine biosynthesis"	"Cysteine and methionine metabolism"	1	0.211538461538462
+"Vitamin B6 metabolism"	"Cysteine and methionine metabolism"	1	0.224489795918367
+"Pyrimidine metabolism"	"Drug metabolism - other enzymes"	1	0.204081632653061
+"Glycolysis / Gluconeogenesis"	"Fatty acid degradation"	1	0.276595744680851
+"Glyoxylate and dicarboxylate metabolism"	"Fatty acid degradation"	1	0.234042553191489
+"Inositol phosphate metabolism"	"Fatty acid degradation"	1	0.285714285714286
+"Pentose phosphate pathway"	"Fatty acid degradation"	1	0.2
+"Tyrosine metabolism"	"Fatty acid degradation"	1	0.416666666666667
+"Galactose metabolism"	"Fructose and mannose metabolism"	3	0.391307814992026
+"Glycerolipid metabolism"	"Fructose and mannose metabolism"	1	0.25
+"Glycolysis / Gluconeogenesis"	"Fructose and mannose metabolism"	1	0.206349206349206
+"Microbial metabolism in diverse environments"	"Fructose and mannose metabolism"	2	0.223208955223881
+"Pentose and glucuronate interconversions"	"Fructose and mannose metabolism"	1	0.244444444444444
+"Pentose phosphate pathway"	"Fructose and mannose metabolism"	3	0.247973830680598
+"Phosphotransferase system (PTS)"	"Fructose and mannose metabolism"	3	0.223905723905724
+"Glycerolipid metabolism"	"Galactose metabolism"	1	0.212765957446809
+"Pentose and glucuronate interconversions"	"Galactose metabolism"	1	0.261904761904762
+"Pentose phosphate pathway"	"Galactose metabolism"	1	0.204081632653061
+"Phosphotransferase system (PTS)"	"Galactose metabolism"	3	0.257499810131389
+"Starch and sucrose metabolism"	"Galactose metabolism"	1	0.268292682926829
+"Pentose and glucuronate interconversions"	"Glycerolipid metabolism"	1	0.470588235294118
+"Glyoxylate and dicarboxylate metabolism"	"Glycine, serine and threonine metabolism"	1	0.301369863013699
+"Microbial metabolism in diverse environments"	"Glycine, serine and threonine metabolism"	1	0.262820512820513
+"Pentose phosphate pathway"	"Glycine, serine and threonine metabolism"	1	0.238805970149254
+"Vitamin B6 metabolism"	"Glycine, serine and threonine metabolism"	1	0.228070175438596
+"Glyoxylate and dicarboxylate metabolism"	"Glycolysis / Gluconeogenesis"	3	0.231912211280905
+"Inositol phosphate metabolism"	"Glycolysis / Gluconeogenesis"	3	0.261705685618729
+"Methane metabolism"	"Glycolysis / Gluconeogenesis"	1	0.215384615384615
+"Microbial metabolism in diverse environments"	"Glycolysis / Gluconeogenesis"	5	0.279368392113053
+"Pentose phosphate pathway"	"Glycolysis / Gluconeogenesis"	1	0.241379310344828
+"Starch and sucrose metabolism"	"Glycolysis / Gluconeogenesis"	1	0.23728813559322
+"Tyrosine metabolism"	"Glycolysis / Gluconeogenesis"	1	0.208333333333333
+"Methane metabolism"	"Glyoxylate and dicarboxylate metabolism"	3	0.270076603049074
+"Microbial metabolism in diverse environments"	"Glyoxylate and dicarboxylate metabolism"	3	0.269863315696649
+"Pentose phosphate pathway"	"Glyoxylate and dicarboxylate metabolism"	1	0.228070175438596
+"Pentose phosphate pathway"	"Inositol phosphate metabolism"	1	0.263157894736842
+"Tyrosine metabolism"	"Inositol phosphate metabolism"	1	0.307692307692308
+"Microbial metabolism in diverse environments"	"Metabolic pathways"	5	0.478401535132154
+"Microbial metabolism in diverse environments"	"Methane metabolism"	4	0.277964429361488
+"Pentose phosphate pathway"	"Methane metabolism"	1	0.218181818181818
+"Pentose phosphate pathway"	"Microbial metabolism in diverse environments"	4	0.243264894109578
+"Pentose phosphate pathway"	"Pentose and glucuronate interconversions"	1	0.25531914893617
+"Tyrosine metabolism"	"Pentose phosphate pathway"	1	0.210526315789474
+"Starch and sucrose metabolism"	"Phosphotransferase system (PTS)"	1	0.387096774193548
+"Butanoate metabolism"	"beta-Alanine metabolism"	1	0.40625
+"Fatty acid degradation"	"beta-Alanine metabolism"	1	0.346153846153846
+"Pentose phosphate pathway"	"beta-Alanine metabolism"	1	0.205128205128205
+"Tyrosine metabolism"	"beta-Alanine metabolism"	1	0.32
