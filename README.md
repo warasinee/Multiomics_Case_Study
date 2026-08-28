@@ -542,9 +542,12 @@ plot_tg_trans_GSEA_KEGG_3 # with fig.height=8, fig.width=20
 To support interactive exploration of enrichment pathway networks, we developed a dedicated R Shiny web application called Network of Enriched Pathways (https://warasinee.shinyapps.io/Network_App/). The application provides a graphical interface for filtering, visualising, and exporting the network.
 
 **Updated:** [How to prepare input (Node & Edge table) for Shiny App v2!](https://github.com/warasinee/Multiomics_Case_Study/blob/main/R_script/5.1_Node_Edge_data_Strep_All_270826.md)
+
 **Example dataset: (*S. pyogenes*)** 
 Pathway enrichment from single‑omics differential expression analyses, performed using **GSEA with the KEGG database**. 
+
 [Node table](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Data/Strep_all_node_trans_GSEA_KEGG_new.tsv)
+
 [Edge table](https://github.com/warasinee/Multiomics_Case_Study/blob/main/Data/Strep_all_edge_trans_GSEA_KEGG_new.tsv)
 
 
