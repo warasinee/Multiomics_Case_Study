@@ -38,13 +38,11 @@ To support interactive exploration of enrichment pathway networks, we developed 
 **Figure 1. Structure of a Shiny web application for interactive network visualisation.** There are four main parts in this application: (i) control panel, (ii) interactive plot, (iii) statistic plot, and (iv) node ranking table.
 
 
-
 <p align = "center">
-<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app_v2/Output/Shiny_app_v2.png" width=90% height=90%>
+<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app_v2/Output/Network_filtering.png" width=90% height=90%>
 
 **Figure 2. Networks of enriched pathways in Streptococcus pyogenes exposed to human serum.** 
 The networks were constructed from the outputs of DE analysis (A-B). Network filtering was applied to reduce visual clutter from the dense network (B). Nodes represent pathways, and connected edges represent significant pairwise similarity between enriched functional annotations or pathways calculated using Jaccard’s similarity score. The edge length reflects pathway similarity. Node sizes and colours represent the number of strains sharing the same enriched pathways. Edge widths indicate the number of strains with interaction between pathways.
 
-<img width="468" height="240" alt="image" src="https://github.com/user-attachments/assets/5db65450-a980-48dd-b1ed-26161bbdb079" />
 
 
