@@ -542,7 +542,8 @@ plot_tg_trans_GSEA_KEGG_3 # with fig.height=8, fig.width=20
 To support interactive exploration of enrichment pathway networks, we developed a dedicated R Shiny web application called Network of Enriched Pathways (https://warasinee.shinyapps.io/Network_App/). The application provides a graphical interface for filtering, visualising, and exporting the network.
 
 <p align = "center">
-<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app/Output/Example1.png" width=90% height=90%>
+<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app_v2/Output/Shiny_app_v2.png" width=90% height=90%>
+
 
 
 
