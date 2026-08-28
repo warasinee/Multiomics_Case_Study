@@ -538,6 +538,12 @@ plot_tg_trans_GSEA_KEGG_3 # with fig.height=8, fig.width=20
 <img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app/Output/Example1.png" width=90% height=90%>
 
 
+#### [Shiny App for network visualisation v2]()
+<p align = "center">
+<img src="https://github.com/warasinee/Multiomics_Case_Study/blob/main/Network_app/Output/Example1.png" width=90% height=90%>
+
+
+
 
 
 
