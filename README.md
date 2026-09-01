@@ -35,6 +35,8 @@ RCy3, DOSE, clusterProfiler, enrichplot
 
 ### Suggested code to install all R libraries 
 ```r
+**Install packages from CRAN or Bioconductor**
+
 install.packages(c(
   "mixOmics", "tidyverse", "igraph", "ggraph",
   "tidygraph", "shiny", "shinythemes", "conflicted", "MASS", "lattice"
@@ -42,6 +44,17 @@ install.packages(c(
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install(c("RCy3", "DOSE", "clusterProfiler", "enrichplot"))
+###########################################
+**Install packages from a YAML file**
+
+install.packages("devtools")
+devtools::install_github("combiz/yamlpack")
+library(yamlpack)
+
+yamlpack <- read_yamlpack("yamlpack.yml") 
+install_yamlpack(yamlpack)
+
+# More info: https://github.com/combiz/yamlpack
 ```
 
 ### External
